@@ -1,0 +1,114 @@
+[ -f /usr/share/autoenv-git/activate.sh ] && source /usr/share/autoenv-git/activate.sh
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
+
+. $HOME/.asdf/asdf.sh
+
+plugins=(
+    git               # git aliases and utilities
+    docker            # Docker aliases
+    docker-compose    # Docker compose aliases
+    asdf              # asdf vm
+    autoenv           # Configure environment variables from .env files
+    aws               # Completion and utilities to aws CLI
+    gitignore         # Enabe the use of https://gitignore.io
+    kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+    lein              # Completion for Leiningen cli
+    zsh_reload        # Reload zsh in the current session
+)
+
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+zinit light-mode for \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+
+zplugin light zdharma/fast-syntax-highlighting
+
+zplugin light zsh-users/zsh-completions
+zplugin light zsh-users/zsh-autosuggestions
+
+fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
+autoload -Uz compinit && compinit
+
+eval $(gh completion -s zsh 2> /dev/null)
+
+complete -C $(which aws_completer) aws 2> /dev/null
+
+source <(kubectl completion zsh) 2> /dev/null
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(navi widget zsh)
+
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_DEFAULT_CTRL_T_COMMAND="FZF_DEFAULT_COMMAND"
+
+cd_fzf (){
+    cd $HOME && cd $(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+}
+
+bindkey -s "^[c" "cd_fzf^M"
+
+/opt/shell-color-scripts/colorscript.sh random
+
+if [ -f /etc/bash.command-not-found ]; then
+    . /etc/bash.command-not-found
+fi
+
+alias pbcopy='xclip -selection clipboard'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+
+alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+
+alias cls='clear'
+
+alias open="xdg-open"
+
+alias d='docker'
+alias dc='docker-compose'
+
+alias emacs='LANG=pt_BR.utf8 && emacs'
+
+alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+vpn () {
+    VPN_LOCATION="$HOME/.vpn"
+
+    if [ $1 = office ] ;then
+
+        sudo openfortivpn -c $VPN_LOCATION/office.conf
+
+    elif [ $1 = kafka ]; then
+        sudo openvpn \
+             --config $VPN_LOCATION/kafka/kafka.ovpn \
+             --cert $VPN_LOCATION/kafka/kafka.crt \
+             --key $VPN_LOCATION/kafka/kafka.key \
+             --auth-retry interact
+    fi
+}
