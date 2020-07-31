@@ -76,6 +76,8 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
+alias cra='create-react-app'
+
 alias pbcopy='xclip -selection clipboard'
 
 alias ..='cd ..'

@@ -23,6 +23,7 @@
   - [[#random-colorscript][Random Colorscript]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
+  - [[#react][React]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
   - [[#navigate-to-parent-directories][Navigate to parent directories]]
   - [[#switch-ls-to-use-exa-cli][Switch `ls` to use `exa` cli]]
@@ -208,6 +209,10 @@ fi
 #+END_SRC
 
 * Aliases
+** React
+#+BEGIN_SRC shell
+alias cra='create-react-app'
+#+END_SRC
 ** Copy output to clipboard
 
 #+BEGIN_SRC shell
