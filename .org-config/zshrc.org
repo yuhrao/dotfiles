@@ -1,0 +1,288 @@
+#+TITLE: ZSH Configuration
+#+AUTHOR: Yuhri Graziano Bernardes
+#+PROPERTY: header-args :tangle ~/.zshrc
+
+* Table of Contents :toc:
+- [[#autoenv][Autoenv]]
+- [[#p10k-theme][P10k Theme]]
+  - [[#load-p10k-source][Load p10k source]]
+  - [[#load-p10k-config][Load p10k config]]
+- [[#oh-my-zsh][Oh My ZSH!]]
+- [[#asdf-vm][ASDF VM]]
+- [[#zsh-plugins][ZSH Plugins]]
+  - [[#embedded-plugin-manager][Embedded Plugin Manager]]
+  - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
+  - [[#plugins][Plugins]]
+- [[#compleations][Compleations]]
+  - [[#asdf-vm-1][ASDF VM]]
+  - [[#github-cli][Github CLI]]
+  - [[#aws-cli][AWS CLI]]
+  - [[#kubernetes][Kubernetes]]
+- [[#misc][Misc]]
+  - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
+  - [[#random-colorscript][Random Colorscript]]
+  - [[#bash-insulter][Bash insulter]]
+- [[#aliases][Aliases]]
+  - [[#copy-output-to-clipboard][Copy output to clipboard]]
+  - [[#navigate-to-parent-directories][Navigate to parent directories]]
+  - [[#switch-ls-to-use-exa-cli][Switch `ls` to use `exa` cli]]
+  - [[#clear-screen][Clear screen]]
+  - [[#file-manager][File Manager]]
+  - [[#docker][Docker]]
+  - [[#emacs-startup][Emacs startup]]
+  - [[#config-git-bare-repository][Config git bare repository]]
+- [[#functions][Functions]]
+  - [[#start-vpn-connection][Start VPN connection]]
+
+* Autoenv
+[[https://github.com/Tarrasch/zsh-autoenv][repo]]
+
+Autoenv load custom environment variables based on the current location and a `.env` file.
+
+#+BEGIN_SRC shell
+[ -f /usr/share/autoenv-git/activate.sh ] && source /usr/share/autoenv-git/activate.sh
+#+END_SRC
+
+* P10k Theme
+[[https://github.com/romkatv/powerlevel10k][repo]]
+
+Powerlevel10k is a theme with powerfull feature to better shell visualization
+
+** Load p10k source
+
+#+BEGIN_SRC shell
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+#+END_SRC
+
+** Load p10k config
+[[https://github.com/romkatv/powerlevel10k#batteries-included][reference]] | [[https://github.com/romkatv/powerlevel10k#extensible][Create your own config]]
+
+#+BEGIN_SRC shell
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#+END_SRC
+
+* Oh My ZSH!
+#+BEGIN_SRC shell
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
+#+END_SRC
+
+* ASDF VM
+#+BEGIN_SRC shell
+. $HOME/.asdf/asdf.sh
+#+END_SRC
+* ZSH Plugins
+** Embedded Plugin Manager
+
+#+BEGIN_SRC shell
+plugins=(
+    git               # git aliases and utilities
+    docker            # Docker aliases
+    docker-compose    # Docker compose aliases
+    asdf              # asdf vm
+    autoenv           # Configure environment variables from .env files
+    aws               # Completion and utilities to aws CLI
+    gitignore         # Enabe the use of https://gitignore.io
+    kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+    lein              # Completion for Leiningen cli
+    zsh_reload        # Reload zsh in the current session
+)
+#+END_SRC
+
+** Zinit Plugin Manaeger
+
+[[https://github.com/zdharma/zinit#installation][Installation]] | [[https://github.com/zdharma/zinit#usage][Usage]]
+
+*** Startup
+These scripts was added automatcally by the installer. (see Installation link above)
+
+#+BEGIN_SRC shell
+
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+zinit light-mode for \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+#+END_SRC
+
+** Plugins
+My plugins
+*** Syntax highlit
+#+BEGIN_SRC shell
+zplugin light zdharma/fast-syntax-highlighting
+#+END_SRC
+
+*** Autocompleation
+#+BEGIN_SRC shell
+zplugin light zsh-users/zsh-completions
+zplugin light zsh-users/zsh-autosuggestions
+#+END_SRC
+
+* Compleations
+** ASDF VM
+
+#+BEGIN_SRC shell
+fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
+autoload -Uz compinit && compinit
+#+END_SRC
+** Github CLI
+
+#+BEGIN_SRC shell
+eval $(gh completion -s zsh 2> /dev/null)
+#+END_SRC
+
+** AWS CLI
+
+#+BEGIN_SRC shell
+complete -C $(which aws_completer) aws 2> /dev/null
+#+END_SRC
+
+** Kubernetes
+- kubectl cli
+
+#+BEGIN_SRC shell
+source <(kubectl completion zsh) 2> /dev/null
+#+END_SRC
+
+* Misc
+** Fuzzy Finder and Navi
+fzf: [[https://github.com/junegunn/fzf#installation][install]] | [[https://github.com/junegunn/fzf#usage][usage]]
+navi: [[https://github.com/denisidoro/navi#installation][install]] | [[https://github.com/denisidoro/navi#usage][usage]]
+
+*** Load sources
+#+BEGIN_SRC shell
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(navi widget zsh)
+#+END_SRC
+
+*** Fzf default commands
+
+#+BEGIN_SRC shell
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND="fd --type f"
+export FZF_DEFAULT_CTRL_T_COMMAND="FZF_DEFAULT_COMMAND"
+#+END_SRC
+
+*** Custom `cd` command for fzf
+- Use `fd` command to get directories
+- Configure space key for toggle preview
+- Configure preview for show dir content
+
+#+BEGIN_SRC shell
+cd_fzf (){
+    cd $HOME && cd $(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+}
+
+bindkey -s "^[c" "cd_fzf^M"
+#+END_SRC
+
+** Random Colorscript
+Run colorcript on shell startup
+
+#+BEGIN_SRC shell
+/opt/shell-color-scripts/colorscript.sh random
+#+END_SRC
+
+** Bash insulter
+load bash insulter
+
+#+BEGIN_SRC shell
+if [ -f /etc/bash.command-not-found ]; then
+    . /etc/bash.command-not-found
+fi
+#+END_SRC
+
+* Aliases
+** Copy output to clipboard
+
+#+BEGIN_SRC shell
+alias pbcopy='xclip -selection clipboard'
+#+END_SRC
+
+** Navigate to parent directories
+
+#+BEGIN_SRC shell
+alias ..='cd ..'
+alias ...='cd ../..'
+#+END_SRC
+
+** Switch `ls` to use `exa` cli
+
+#+BEGIN_SRC shell
+alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+#+END_SRC
+
+** Clear screen
+
+#+BEGIN_SRC shell
+alias cls='clear'
+#+END_SRC
+
+** File Manager
+Open in file manager
+
+#+BEGIN_SRC shell
+alias open="xdg-open"
+#+END_SRC
+
+** Docker
+*** CLI function
+Just for easily cli usage
+
+#+BEGIN_SRC shell
+alias d='docker'
+alias dc='docker-compose'
+#+END_SRC
+** Emacs startup
+
+#+BEGIN_SRC shell
+alias emacs='LANG=pt_BR.utf8 && emacs'
+#+END_SRC
+
+** Config git bare repository
+
+Alias to add configuration files to bare repository
+
+#+BEGIN_SRC shell
+alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+#+END_SRC
+
+* Functions
+** Start VPN connection
+
+#+BEGIN_SRC shell
+
+vpn () {
+    VPN_LOCATION="$HOME/.vpn"
+
+    if [ $1 = office ] ;then
+
+        sudo openfortivpn -c $VPN_LOCATION/office.conf
+
+    elif [ $1 = kafka ]; then
+        sudo openvpn \
+             --config $VPN_LOCATION/kafka/kafka.ovpn \
+             --cert $VPN_LOCATION/kafka/kafka.crt \
+             --key $VPN_LOCATION/kafka/kafka.key \
+             --auth-retry interact
+    fi
+}
+#+END_SRC
