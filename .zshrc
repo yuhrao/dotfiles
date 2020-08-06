@@ -61,11 +61,11 @@ source <(kubectl completion zsh) 2> /dev/null
 source <(navi widget zsh)
 
 export FZF_DEFAULT_OPS="--extended"
-export FZF_DEFAULT_COMMAND="fd --type f"
-export FZF_DEFAULT_CTRL_T_COMMAND="FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND="fd --hidden --type f"
+export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 cd_fzf (){
-    cd $HOME && cd $(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+    cd $HOME && cd $(fd --hidden -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
 }
 
 bindkey -s "^[c" "cd_fzf^M"
@@ -83,8 +83,8 @@ alias pbcopy='xclip -selection clipboard'
 alias ..='cd ..'
 alias ...='cd ../..'
 
-alias ls='exa -al --color=always --group-directories-first' # my preferred listing
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ls='exa --color=always --group-directories-first' # my preferred listing
+alias la='exa -la --color=always --group-directories-first'  # all files and dirs
 alias ll='exa -l --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 
@@ -96,6 +96,8 @@ alias d='docker'
 alias dc='docker-compose'
 
 alias emacs='LANG=pt_BR.utf8 && emacs'
+
+alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
