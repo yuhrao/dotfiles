@@ -23,6 +23,7 @@
   - [[#random-colorscript][Random Colorscript]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
+  - [[#generate-ssh-key][Generate SSH Key]]
   - [[#react][React]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
   - [[#navigate-to-parent-directories][Navigate to parent directories]]
@@ -209,6 +210,13 @@ fi
 #+END_SRC
 
 * Aliases
+
+** Generate SSH Key
+
+#+BEGIN_SRC shell
+alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
+#+END_SRC
+
 ** React
 #+BEGIN_SRC shell
 alias cra='create-react-app'

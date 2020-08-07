@@ -76,6 +76,8 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
+alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
+
 alias cra='create-react-app'
 
 alias pbcopy='xclip -selection clipboard'
