@@ -198,17 +198,15 @@ asdf install fd $(asdf list-all fd | tail -1)
 asdf global fd $(asdf list-all fd | tail -1)
 #+END_SRC
 
-** Fuzzy Finder
-#+BEGIN_SRC shell
-asdf plugin add fzf https://github.com/kompiro/asdf-fzf.git
-asdf install fzf $(asdf list-all fzf | grep -e "\W" | tail -1)
-asdf global fzf $(asdf list-all fzf | grep -e "\W" | tail -1)
-#+END_SRC
-
-
 * Babashka
 #+BEGIN_SRC shell
 curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install | sudo sh
+#+END_SRC
+
+* Fuzzy Finder
+#+BEGIN_SRC shell
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 #+END_SRC
 
 * Navi
@@ -259,6 +257,11 @@ yay -S --noconfirm insomnia
 * Discord
 #+BEGIN_SRC shell
 sudo snap install discord
+#+END_SRC
+
+* Better Man Pages
+#+BEGIN_SRC shell
+yay -S --noconfirm macho
 #+END_SRC
 
 * Misc
