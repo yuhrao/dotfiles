@@ -18,7 +18,6 @@ plugins=(
     docker            # Docker aliases
     docker-compose    # Docker compose aliases
     asdf              # asdf vm
-    autoenv           # Configure environment variables from .env files
     aws               # Completion and utilities to aws CLI
     gitignore         # Enabe the use of https://gitignore.io
     kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
@@ -48,6 +47,10 @@ zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 
+if [ $(command -v direnv) ] ; then
+    eval "$(direnv hook zsh)"
+fi
+
 fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
 autoload -Uz compinit && compinit
 
@@ -70,11 +73,19 @@ cd_fzf (){
 
 bindkey -s "^[c" "cd_fzf^M"
 
+if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
 /opt/shell-color-scripts/colorscript.sh random
+fi
+
+if [ $(command -v direnv) ] ; then
+    eval "$(direnv hook zsh)"
+fi
 
 if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
+
+alias reload='. $HOME/.zshrc'
 
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
 
@@ -102,6 +113,9 @@ alias emacs='LANG=pt_BR.utf8 && emacs'
 alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias cfga='cfg add'
+alias cfgs='cfg status'
+alias cfgc='cfg commit -m'
 
 vpn () {
     VPN_LOCATION="$HOME/.vpn"

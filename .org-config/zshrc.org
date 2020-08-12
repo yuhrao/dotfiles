@@ -13,6 +13,7 @@
   - [[#embedded-plugin-manager][Embedded Plugin Manager]]
   - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
   - [[#plugins][Plugins]]
+- [[#direnv][Direnv]]
 - [[#compleations][Compleations]]
   - [[#asdf-vm-1][ASDF VM]]
   - [[#github-cli][Github CLI]]
@@ -21,8 +22,10 @@
 - [[#misc][Misc]]
   - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
   - [[#random-colorscript][Random Colorscript]]
+  - [[#direnv-1][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
+  - [[#reload-zsh][Reload Zsh]]
   - [[#generate-ssh-key][Generate SSH Key]]
   - [[#react][React]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
@@ -86,7 +89,6 @@ plugins=(
     docker            # Docker aliases
     docker-compose    # Docker compose aliases
     asdf              # asdf vm
-    autoenv           # Configure environment variables from .env files
     aws               # Completion and utilities to aws CLI
     gitignore         # Enabe the use of https://gitignore.io
     kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
@@ -133,6 +135,14 @@ zplugin light zdharma/fast-syntax-highlighting
 #+BEGIN_SRC shell
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
+#+END_SRC
+
+* Direnv
+Manage environment variables
+#+BEGIN_SRC shell
+if [ $(command -v direnv) ] ; then
+    eval "$(direnv hook zsh)"
+fi
 #+END_SRC
 
 * Compleations
@@ -197,7 +207,18 @@ bindkey -s "^[c" "cd_fzf^M"
 Run colorcript on shell startup
 
 #+BEGIN_SRC shell
+if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
 /opt/shell-color-scripts/colorscript.sh random
+fi
+#+END_SRC
+
+
+** Direnv
+Manage environment variables
+#+BEGIN_SRC shell
+if [ $(command -v direnv) ] ; then
+    eval "$(direnv hook zsh)"
+fi
 #+END_SRC
 
 ** Bash insulter
@@ -210,6 +231,11 @@ fi
 #+END_SRC
 
 * Aliases
+
+** Reload Zsh
+#+BEGIN_SRC shell
+alias reload='. $HOME/.zshrc'
+#+END_SRC
 
 ** Generate SSH Key
 
@@ -281,6 +307,9 @@ Alias to add configuration files to bare repository
 
 #+BEGIN_SRC shell
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias cfga='cfg add'
+alias cfgs='cfg status'
+alias cfgc='cfg commit -m'
 #+END_SRC
 
 * Functions
