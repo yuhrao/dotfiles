@@ -57,6 +57,11 @@ fg config --local status.showUntrackedFiles no
 cfg checkout
 #+END_SRC
 
+* Neovim
+#+BEGIN_SRC shell
+yay -S --noconfirm nvim
+#+END_SRC
+
 * Emacs (Doom)
 #+BEGIN_SRC shell
 yay  -S --noconfirm emacs27-git
@@ -127,8 +132,6 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0-rc1
 asdf update
 #+END_SRC
 
-** JQ
-
 ** Java
 =jq= is required for use asdf java plugin
 #+BEGIN_SRC shell
@@ -184,35 +187,39 @@ asdf install nodejs $(asdf list-all nodejs | tail -n1)
 asdf global nodejs $(asdf list-all nodejs | tail -n1)
 #+END_SRC
 
-** Ripgrep
-#+BEGIN_SRC shell
-asdf plugin add ripgrep
-asdf install ripgrep $(asdf list-all ripgrep | tail -1)
-asdf global ripgrep $(asdf list-all ripgrep | tail -1)
-#+END_SRC
-
-** Better Finder =fd=
-#+BEGIN_SRC shell
-asdf plugin add fd
-asdf install fd $(asdf list-all fd | tail -1)
-asdf global fd $(asdf list-all fd | tail -1)
-#+END_SRC
-
 * Babashka
 #+BEGIN_SRC shell
 curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install | sudo sh
 #+END_SRC
 
-* Fuzzy Finder
+* Terminal utilities
+
+** Fuzzy Finder
 #+BEGIN_SRC shell
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 #+END_SRC
 
-* Navi
+** Navi
 #+BEGIN_SRC shell
 yay -S --noconfirm navi
 #+END_SRC
+
+** Better Man Pages
+#+BEGIN_SRC shell
+yay -S --noconfirm macho
+#+END_SRC
+
+** Direnv
+#+BEGIN_SRC shell
+yay -S --noconfirm direnv
+#+END_SRC
+
+** Better Finder =fd=
+#+BEGIN_SRC shell
+yay -S --noconfirm fd
+#+END_SRC
+
 
 * ULaucher
 #+BEGIN_SRC shell
@@ -244,9 +251,15 @@ yay -S --noconfirm franz-bin
 yay -S --noconfirm openfortivpn
 #+END_SRC
 
-* Colorscript
+* Misc
+** Colorscript
 #+BEGIN_SRC shell
 yay -S --noconfirm shell-color-scripts
+#+END_SRC
+** Others
+
+#+BEGIN_SRC shell
+yay -S --noconfirm tree lolcat cowsay fortune-mod
 #+END_SRC
 
 * Insomnia
@@ -257,15 +270,4 @@ yay -S --noconfirm insomnia
 * Discord
 #+BEGIN_SRC shell
 sudo snap install discord
-#+END_SRC
-
-* Better Man Pages
-#+BEGIN_SRC shell
-yay -S --noconfirm macho
-#+END_SRC
-
-* Misc
-
-#+BEGIN_SRC shell
-yay -S --noconfirm tree lolcat cowsay fortune-mod
 #+END_SRC
