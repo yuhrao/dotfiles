@@ -1,6 +1,6 @@
 [global_config]
   title_use_system_font = False
-  title_font = Iosevka Term Medium Expanded 11
+  title_font = Iosevka Term Medium Expanded 10
 [keybindings]
   go_up = <Shift>Up
   go_down = <Shift>Down

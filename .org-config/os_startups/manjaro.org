@@ -215,6 +215,11 @@ yay -S --noconfirm macho
 yay -S --noconfirm direnv
 #+END_SRC
 
+** Dotenv
+#+BEGIN_SRC shell
+npm install -g dotenv-cli
+#+END_SRC
+
 ** Better Finder =fd=
 #+BEGIN_SRC shell
 yay -S --noconfirm fd
