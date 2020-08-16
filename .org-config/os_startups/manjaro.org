@@ -187,9 +187,10 @@ asdf install nodejs $(asdf list-all nodejs | tail -n1)
 asdf global nodejs $(asdf list-all nodejs | tail -n1)
 #+END_SRC
 
-* Babashka
+* Babashka & jet
 #+BEGIN_SRC shell
 curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install | sudo sh
+bash <(curl -s https://raw.githubusercontent.com/borkdude/jet/master/install)
 #+END_SRC
 
 * Terminal utilities
