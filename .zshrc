@@ -15,14 +15,12 @@ source $ZSH/oh-my-zsh.sh
 
 plugins=(
     git               # git aliases and utilities
-    docker            # Docker aliases
-    docker-compose    # Docker compose aliases
-    asdf              # asdf vm
-    aws               # Completion and utilities to aws CLI
-    gitignore         # Enabe the use of https://gitignore.io
-    kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-    lein              # Completion for Leiningen cli
-    zsh_reload        # Reload zsh in the current session
+    # docker            # Docker aliases
+    # docker-compose    # Docker compose aliases
+    # asdf              # asdf vm
+    # gitignore         # Enabe the use of https://gitignore.io
+    # kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
+    # lein              # Completion for Leiningen cli
 )
 
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
