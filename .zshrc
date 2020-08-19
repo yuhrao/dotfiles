@@ -15,12 +15,6 @@ source $ZSH/oh-my-zsh.sh
 
 plugins=(
     git               # git aliases and utilities
-    # docker            # Docker aliases
-    # docker-compose    # Docker compose aliases
-    # asdf              # asdf vm
-    # gitignore         # Enabe the use of https://gitignore.io
-    # kubectl           # Kubectl utils. Aliases availables at https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-    # lein              # Completion for Leiningen cli
 )
 
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -67,6 +61,7 @@ export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 cd_fzf (){
     cd $HOME && cd $(fd --hidden -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+    clear
 }
 
 bindkey -s "^[c" "cd_fzf^M"
@@ -116,9 +111,10 @@ alias cfgs='cfg status'
 alias cfgc='cfg commit -m'
 
 vpn () {
-    VPN_LOCATION="$HOME/.vpn"
+    VPN_LOCATION="$HOME/.accesses/paygo"
 
     if [ $1 = office ] ;then
+
 
         sudo openfortivpn -c $VPN_LOCATION/office.conf
 

@@ -395,22 +395,17 @@
 
   ;; Visualize connections between library dependencies and project namespaces
   ;; https://github.com/SevereOverfl0w/vizns
-  ;; clj -A:graph-deps navigate      # navigable folder of SVGs
-  ;; clj -A:graph-deps   # deps-graph.dot file
-  ;; clj -A:graph-deps single -o deps-graph.png -f png # png file
-  ;; clj -A:graph-deps single -o deps-graph.svg -f svg # svg file
-  ;; clj -A:graph-deps single --show  # View graph without saving
+  ;; clj -A:graph-deps   # View graph deps
 
-  :graph-deps
-  {:deps      {io.dominic/vizns {:git/url "https://github.com/SevereOverfl0w/vizns.git"
-                                 :sha     "fb2391a4af24246ac4e46f3a573970ba5b7c92de"}}
-   :main-opts ["-m" "io.dominic.vizns.core"]}
+  :graph-deps {:extra-deps {org.clojure/tools.deps.graph {:mvn/version "0.1.14"}}
+               :main-opts  ["-m" "clojure.tools.deps.graph"]}
 
   ;; Generate single PNG image of library dependencies
   :graph-deps-png
-  {:deps      {io.dominic/vizns {:git/url "https://github.com/SevereOverfl0w/vizns.git"
+  {:extra-deps      {io.dominic/vizns {:git/url "https://github.com/SevereOverfl0w/vizns.git"
                                  :sha     "fb2391a4af24246ac4e46f3a573970ba5b7c92de"}}
    :main-opts ["-m" "io.dominic.vizns.core" "single" "-o" "deps-graph.png" "-f" "png"]}
+
 
 
 

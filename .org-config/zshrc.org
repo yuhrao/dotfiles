@@ -12,7 +12,6 @@
 - [[#zsh-plugins][ZSH Plugins]]
   - [[#embedded-plugin-manager][Embedded Plugin Manager]]
   - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
-  - [[#plugins][Plugins]]
 - [[#direnv][Direnv]]
 - [[#compleations][Compleations]]
   - [[#asdf-vm-1][ASDF VM]]
@@ -116,8 +115,6 @@ zinit light-mode for \
     zinit-zsh/z-a-bin-gem-node
 #+END_SRC
 
-** Plugins
-My plugins
 *** Syntax highlit
 #+BEGIN_SRC shell
 zplugin light zdharma/fast-syntax-highlighting
@@ -190,6 +187,7 @@ export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 #+BEGIN_SRC shell
 cd_fzf (){
     cd $HOME && cd $(fd --hidden -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+    clear
 }
 
 bindkey -s "^[c" "cd_fzf^M"
@@ -310,9 +308,10 @@ alias cfgc='cfg commit -m'
 #+BEGIN_SRC shell
 
 vpn () {
-    VPN_LOCATION="$HOME/.vpn"
+    VPN_LOCATION="$HOME/.accesses/paygo"
 
     if [ $1 = office ] ;then
+
 
         sudo openfortivpn -c $VPN_LOCATION/office.conf
 
