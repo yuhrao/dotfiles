@@ -3,7 +3,6 @@
 #+PROPERTY: header-args :tangle ~/.zshrc
 
 * Table of Contents :toc:
-- [[#autoenv][Autoenv]]
 - [[#p10k-theme][P10k Theme]]
   - [[#load-p10k-source][Load p10k source]]
   - [[#load-p10k-config][Load p10k config]]
@@ -12,20 +11,22 @@
 - [[#zsh-plugins][ZSH Plugins]]
   - [[#embedded-plugin-manager][Embedded Plugin Manager]]
   - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
-- [[#direnv][Direnv]]
+- [[#ssh-agent][SSH Agent]]
 - [[#compleations][Compleations]]
   - [[#asdf-vm-1][ASDF VM]]
   - [[#github-cli][Github CLI]]
   - [[#aws-cli][AWS CLI]]
   - [[#kubernetes][Kubernetes]]
+- [[#langs][Langs]]
+  - [[#golang][Golang]]
 - [[#misc][Misc]]
   - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
   - [[#random-colorscript][Random Colorscript]]
-  - [[#direnv-1][Direnv]]
+  - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
   - [[#reload-zsh][Reload Zsh]]
-  - [[#generate-ssh-key][Generate SSH Key]]
+  - [[#ssh][SSH]]
   - [[#react][React]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
   - [[#navigate-to-parent-directories][Navigate to parent directories]]
@@ -37,15 +38,6 @@
   - [[#config-git-bare-repository][Config git bare repository]]
 - [[#functions][Functions]]
   - [[#start-vpn-connection][Start VPN connection]]
-
-* Autoenv
-[[https://github.com/Tarrasch/zsh-autoenv][repo]]
-
-Autoenv load custom environment variables based on the current location and a `.env` file.
-
-#+BEGIN_SRC shell
-[ -f /usr/share/autoenv-git/activate.sh ] && source /usr/share/autoenv-git/activate.sh
-#+END_SRC
 
 * P10k Theme
 [[https://github.com/romkatv/powerlevel10k][repo]]
@@ -126,14 +118,15 @@ zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 #+END_SRC
 
-* Direnv
-Manage environment variables
+* SSH Agent
+Start ssh agent
 #+BEGIN_SRC shell
-if [ $(command -v direnv) ] ; then
-    eval "$(direnv hook zsh)"
-fi
+start_agent(){
+    eval $(ssh-agent -s)
+    ssh-add
+}
+[[ -z "${SSH_AGENT_PID}" ]] && start_agent
 #+END_SRC
-
 * Compleations
 ** ASDF VM
 
@@ -158,6 +151,16 @@ complete -C $(which aws_completer) aws 2> /dev/null
 
 #+BEGIN_SRC shell
 source <(kubectl completion zsh) 2> /dev/null
+#+END_SRC
+
+* Langs
+** Golang
+#+BEGIN_SRC shell
+export GOPATH=~/go
+export GOBIN=$GOPATH/bin
+export GO111MODULE=on
+
+export PATH=$PATH:$GOBIN
 #+END_SRC
 
 * Misc
@@ -227,7 +230,9 @@ fi
 alias reload='. $HOME/.zshrc'
 #+END_SRC
 
-** Generate SSH Key
+** SSH
+
+*** New rsa key
 
 #+BEGIN_SRC shell
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'

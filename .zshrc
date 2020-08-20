@@ -1,5 +1,3 @@
-[ -f /usr/share/autoenv-git/activate.sh ] && source /usr/share/autoenv-git/activate.sh
-
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -39,9 +37,11 @@ zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 
-if [ $(command -v direnv) ] ; then
-    eval "$(direnv hook zsh)"
-fi
+start_agent(){
+    eval $(ssh-agent -s)
+    ssh-add
+}
+[[ -z "${SSH_AGENT_PID}" ]] && start_agent
 
 fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
 autoload -Uz compinit && compinit
@@ -51,6 +51,12 @@ eval $(gh completion -s zsh 2> /dev/null)
 complete -C $(which aws_completer) aws 2> /dev/null
 
 source <(kubectl completion zsh) 2> /dev/null
+
+export GOPATH=~/go
+export GOBIN=$GOPATH/bin
+export GO111MODULE=on
+
+export PATH=$PATH:$GOBIN
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source <(navi widget zsh)
