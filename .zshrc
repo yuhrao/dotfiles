@@ -84,9 +84,34 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
-alias reload='. $HOME/.zshrc'
+reload() {
+	local cache="$ZSH_CACHE_DIR"
+	autoload -U compinit zrecompile
+	compinit -i -d "$cache/zcomp-$HOST"
+
+	for f in ${ZDOTDIR:-~}/.zshrc "$cache/zcomp-$HOST"; do
+		zrecompile -p $f && command rm -f $f.zwc.old
+	done
+
+	# Use $SHELL if it's available and a zsh shell
+	local shell="$ZSH_ARGZERO"
+	if [[ "${${SHELL:t}#-}" = zsh ]]; then
+		shell="$SHELL"
+	fi
+
+	# Remove leading dash if login shell and run accordingly
+	if [[ "${shell:0:1}" = "-" ]]; then
+		exec -l "${shell#-}"
+	else
+		exec "$shell"
+	fi
+   
+    clear
+}
 
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
+
+alias agent='eval $(ssh-agent -s)'
 
 alias cra='create-react-app'
 
@@ -112,9 +137,35 @@ alias emacs='LANG=pt_BR.utf8 && emacs'
 alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias cfga='cfg add'
-alias cfgs='cfg status'
-alias cfgc='cfg commit -m'
+alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
+alias cfgs='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME status'
+alias cfgc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m'
+alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origin main'
+
+alias gsts='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias gcl='git clone'
+
+alias gl='git pull'
+alias glg='git log --stat'
+alias glgp='git log --stat -p'
+alias glgg='git log --graph'
+alias glgga='git log --graph --decorate --all'
+alias glgm='git log --graph --max-count=10'
+alias glo='git log --oneline --decorate'
+alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
+alias glols="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat"
+alias glod="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'"
+alias glods="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short"
+alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all"
+alias glog='git log --oneline --decorate --graph'
+alias gloga='git log --oneline --decorate --graph --all'
+
+alias gr='git remote'
+alias gra='git remote add'
+alias grup='git remote update'
+alias grv='git remote -v'
 
 vpn () {
     VPN_LOCATION="$HOME/.accesses/paygo"
