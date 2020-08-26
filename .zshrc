@@ -37,12 +37,6 @@ zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 
-start_agent(){
-    eval $(ssh-agent -s)
-    ssh-add
-}
-[[ -z "${SSH_AGENT_PID}" ]] && start_agent
-
 fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
 autoload -Uz compinit && compinit
 
@@ -105,7 +99,7 @@ reload() {
 	else
 		exec "$shell"
 	fi
-   
+
     clear
 }
 
@@ -172,14 +166,20 @@ vpn () {
 
     if [ $1 = office ] ;then
 
-
         sudo openfortivpn -c $VPN_LOCATION/office.conf
 
     elif [ $1 = kafka ]; then
         sudo openvpn \
-             --config $VPN_LOCATION/kafka/kafka.ovpn \
-             --cert $VPN_LOCATION/kafka/kafka.crt \
-             --key $VPN_LOCATION/kafka/kafka.key \
-             --auth-retry interact
+            --config $VPN_LOCATION/kafka/kafka.ovpn \
+            --cert $VPN_LOCATION/kafka/kafka.crt \
+            --key $VPN_LOCATION/kafka/kafka.key \
+            --auth-retry interact
+    fi
+}
+
+start_agent(){
+    if [[ -z "$(pgrep ssh-agent)" ]] ; then
+        eval $(ssh-agent -s)
+        ssh-add
     fi
 }

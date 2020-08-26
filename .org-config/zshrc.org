@@ -11,7 +11,6 @@
 - [[#zsh-plugins][ZSH Plugins]]
   - [[#embedded-plugin-manager][Embedded Plugin Manager]]
   - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
-- [[#ssh-agent][SSH Agent]]
 - [[#compleations][Compleations]]
   - [[#asdf-vm-1][ASDF VM]]
   - [[#github-cli][Github CLI]]
@@ -39,6 +38,7 @@
   - [[#git][Git]]
 - [[#functions][Functions]]
   - [[#start-vpn-connection][Start VPN connection]]
+  - [[#ssh-agent][SSH Agent]]
 
 * P10k Theme
 [[https://github.com/romkatv/powerlevel10k][repo]]
@@ -119,15 +119,6 @@ zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 #+END_SRC
 
-* SSH Agent
-Start ssh agent
-#+BEGIN_SRC shell
-start_agent(){
-    eval $(ssh-agent -s)
-    ssh-add
-}
-[[ -z "${SSH_AGENT_PID}" ]] && start_agent
-#+END_SRC
 * Compleations
 ** ASDF VM
 
@@ -374,22 +365,33 @@ alias grv='git remote -v'
 
 * Functions
 ** Start VPN connection
-
 #+BEGIN_SRC shell
 vpn () {
     VPN_LOCATION="$HOME/.accesses/paygo"
 
     if [ $1 = office ] ;then
 
-
         sudo openfortivpn -c $VPN_LOCATION/office.conf
 
     elif [ $1 = kafka ]; then
         sudo openvpn \
-             --config $VPN_LOCATION/kafka/kafka.ovpn \
-             --cert $VPN_LOCATION/kafka/kafka.crt \
-             --key $VPN_LOCATION/kafka/kafka.key \
-             --auth-retry interact
+            --config $VPN_LOCATION/kafka/kafka.ovpn \
+            --cert $VPN_LOCATION/kafka/kafka.crt \
+            --key $VPN_LOCATION/kafka/kafka.key \
+            --auth-retry interact
     fi
 }
 #+END_SRC
+
+** SSH Agent
+Start ssh agent
+#+BEGIN_SRC shell
+start_agent(){
+    if [[ -z "$(pgrep ssh-agent)" ]] ; then
+        eval $(ssh-agent -s)
+        ssh-add
+    fi
+}
+#+END_SRC
+
+#+RESULTS:
