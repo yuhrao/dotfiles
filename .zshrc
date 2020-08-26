@@ -105,8 +105,6 @@ reload() {
 
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
 
-alias agent='eval $(ssh-agent -s)'
-
 alias cra='create-react-app'
 
 alias pbcopy='xclip -selection clipboard'

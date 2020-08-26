@@ -253,11 +253,6 @@ reload() {
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
 #+END_SRC
 
-*** Start Agent
-#+BEGIN_SRC shell
-alias agent='eval $(ssh-agent -s)'
-#+END_SRC
-
 ** React
 #+BEGIN_SRC shell
 alias cra='create-react-app'
