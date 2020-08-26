@@ -84,7 +84,7 @@ yay  -S --noconfirm terminator
 Some facilities for terminal operation
 
 #+BEGIN_SRC shell
-yay -S --noconfirm exa httpie vivaldi xclip
+yay -S --noconfirm exa httpie vivaldi xclip bat
 #+END_SRC
 
 * Docker
