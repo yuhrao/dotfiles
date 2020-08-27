@@ -226,6 +226,11 @@ npm install -g dotenv-cli
 yay -S --noconfirm fd
 #+END_SRC
 
+** Screenshot
+#+BEGIN_SRC shell
+yay -S noconfirm maim
+#+END_SRC
+
 
 * ULaucher
 #+BEGIN_SRC shell
