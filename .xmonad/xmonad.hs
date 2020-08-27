@@ -16,7 +16,7 @@ myFocusFollowsMouse = True
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
-myBorderWidth   = 1
+myBorderWidth   = 2
 
 myNormalBorderColor  = "#dddddd"
 myFocusedBorderColor = "#ff0000"
@@ -83,6 +83,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Deincrement the number of windows in the master area
     , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+
+    -- Screenshot a region
+    , ((modm, xK_Print), spawn "maim -s -u | xclip -selection clipboard -target image/png -i")
 
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
