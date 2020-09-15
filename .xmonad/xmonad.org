@@ -39,6 +39,7 @@ import qualified Data.Map        as M
 ** Default terminal
 
 #+BEGIN_SRC haskell
+myTerminal :: String
 myTerminal      = "alacritty"
 #+END_SRC
 

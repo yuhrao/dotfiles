@@ -3,6 +3,7 @@
 * System update
 #+BEGIN_SRC shell
 sudo pacman -Sc
+sudo pacman -Sy
 sudo pacman -Syyu
 #+END_SRC
 
@@ -44,13 +45,29 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 #+END_SRC
 
+* SSH Config
+Execute vivaldi initial configuration and login to github.
+#+BEGIN_SRC shell
+yay -S --noconfirm vivaldi
+#+END_SRC
+
+After ssh creation, add it to your GitHub account
+
+** Generate SSH
+#+BEGIN_SRC shell
+ssh-keygen -t rsa -b 4096 -C "your-email"
+eval "$(ssh-agent -s)"
+ssh-add
+#+END_SRC
+
 * Bring me my dotfiles!
+
 We need to remove some files to avoid conflict
 
 #+BEGIN_SRC shell
 rm -rf $HOME/.zshrc $HOME/.gitconfig $HOME/.bashrc
 export DOTFILES_GIT_DIR=$HOME/.dotfiles
-export DOTFILES_DEPO_URL='https://github.com/YuhriBernardes/dotfiles.git'
+export DOTFILES_DEPO_URL='git@github.com:YuhriBernardes/dotfiles.git'
 git clone --bare $DOTFILES_DEPO_URL $DOTFILES_GIT_DIR
 alias cfg='/usr/bin/git --git-dir=$DOTFILES_GIT_DIR --work-tree=$HOME'
 fg config --local status.showUntrackedFiles no
@@ -70,21 +87,23 @@ yay  -S --noconfirm emacs27-git
 Before start doom emacs installation, bring you Doom emacs configuration if you have some
 
 #+BEGIN_SRC shell
-git clone https://github.com/YuhriBernardes/doom-emacs-config.git $HOME/.doom.d
+export DOOM_EMACS_REPO_URL='git@github.com:YuhriBernardes/doom-emacs-config.git'
+git clone $DOOM_EMACS_REPO_URL $HOME/.doom.d
 git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
+~/.emacs.d/bin/doom sync
 #+END_SRC
 
-* Terminator terminal
+* Terminal emulator
 #+BEGIN_SRC shell
-yay  -S --noconfirm terminator
+yay  -S --noconfirm alacritty
 #+END_SRC
 
 * Misc
 Some facilities for terminal operation
 
 #+BEGIN_SRC shell
-yay -S --noconfirm exa httpie vivaldi xclip bat
+yay -S --noconfirm exa httpie xclip bat
 #+END_SRC
 
 * Docker
@@ -93,7 +112,7 @@ We need to add our user to docker group, otherwise we will need to use `sudo doc
 This operation needs system reboot or logoff
 
 #+BEGIN_SRC shell
-yay docker
+yay -S --noconfirm docker
 sudo usermod -aG docker $(whoami)
 #+END_SRC
 
@@ -135,47 +154,55 @@ asdf update
 ** Java
 =jq= is required for use asdf java plugin
 #+BEGIN_SRC shell
-yay jq
+yay -S --noconfirm jq
 #+END_SRC
 
-Install the latest version of =openjdk=
+Install =openjdk=
 We need to remove the existent java in the system, otherwise we can't refer to our asdf java in the terminal
 
 #+BEGIN_SRC shell
 sudo rm -rf /bin/java
 asdf plugin-add java https://github.com/halcyon/asdf-java.git
-asdf install java $(asdf list-all java | grep openjdk | tail -n1)
-asdf global java $(asdf list-all java | grep openjdk | tail -n1)
+export JAVA_VERSION='adoptopenjdk-8.0.265+1.openj9-0.21.0'
+asdf install java $JAVA_VERSION && asdf global java $JAVA_VERSION
+unset JAVA_VERSION
 #+END_SRC
 
 ** Rlwrap
-#+BEGIN_SRC shell
-asdf plugin-add rlwrap https://github.com/asdf-community/asdf-rlwrap.git
-asdf install rlwrap $(asdf list-all rlwrap | tail -n1)
-asdf global rlwrap $(asdf list-all rlwrap | tail -n1)
-#+END_SRC
 
 ** Clojure
+*** Rlwrap
+Needed to use =clj= command in the terminal
+
+#+BEGIN_SRC shell
+yay -S --noconfirm rlwrap
+#+END_SRC
+
 *** Clojure core (tools deps)
 #+BEGIN_SRC shell
 asdf plugin-add clojure https://github.com/halcyon/asdf-clojure.git
-asdf install clojure $(asdf list-all clojure | tail -n1)
-asdf global clojure $(asdf list-all clojure | tail -n1)
+export CLJ_VERSION=$(asdf list-all clojure | tail -n1)
+asdf install clojure $CLJ_VERSION && asdf global clojure $CLJ_VERSION
+unset CLJ_VERSION
 #+END_SRC
 
 *** Leiningen
 #+BEGIN_SRC shell
 asdf plugin-add lein https://github.com/miorimmax/asdf-lein.git
-asdf install lein $(asdf list-all lein | tail -n1)
-asdf global lein $(asdf list-all lein | tail -n1)
+export LEIN_VERSION=$(asdf list-all lein | tail -n1)
+asdf install lein $LEIN_VERSION && asdf global lein $LEIN_VERSION
+unset LEIN_VERSION
 #+END_SRC
+
+#+RESULTS:
 
 ** Kubectl
 Kuberenetes CLI
 #+BEGIN_SRC shell
 asdf plugin-add kubectl https://github.com/Banno/asdf-kubectl.git
-asdf install kubectl $(asdf list-all kubectl | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1)
-asdf global kubectl $(asdf list-all kubectl | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1)
+export KUBE_VERSION=$(asdf list-all kubectl | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1) && echo Kuber version $KUBE_VERSION
+asdf install kubectl $KUBE_VERSION && asdf global kubectl $KUBE_VERSION
+unset KUBE_VERSION
 #+END_SRC
 
 ** NodeJS
@@ -183,22 +210,46 @@ asdf global kubectl $(asdf list-all kubectl | grep -e "^[0-9]*.[0-9]*.[0-9]*$" |
 #+BEGIN_SRC shell
 asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-asdf install nodejs $(asdf list-all nodejs | tail -n1)
-asdf global nodejs $(asdf list-all nodejs | tail -n1)
+export NODE_VERSION=$(asdf list-all nodejs | tail -n1)
+asdf install nodejs $NODE_VERSION && asdf global nodejs $NODE_VERSION
+unset NODE_VERSION
+#+END_SRC
+
+** Golang
+#+BEGIN_SRC shell
+asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
+export GO_VERSION=$(asdf list-all golang | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1) && echo Installing Golang version: $GO_VERSION
+asdf install golang $GO_VERSION && asdf global golang $GO_VERSION
+unset GO_VERSION
+#+END_SRC
+
+*** Packages to work with emacs
+#+BEGIN_SRC shell
+go get -u github.com/motemen/gore/cmd/gore
+go get -u github.com/stamblerre/gocode
+go get -u golang.org/x/tools/cmd/godoc
+go get -u golang.org/x/tools/cmd/goimports
+go get -u golang.org/x/tools/cmd/gorename
+go get -u golang.org/x/tools/cmd/guru
+go get -u github.com/cweill/gotests/...
+go get -u github.com/fatih/gomodifytags
 #+END_SRC
 
 * Babashka & jet
 #+BEGIN_SRC shell
 curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install | sudo sh
-bash <(curl -s https://raw.githubusercontent.com/borkdude/jet/master/install)
+
+curl -s https://raw.githubusercontent.com/borkdude/jet/master/install > /tmp/install_jet
+sudo chmod +x /tmp/install_jet
+sudo /tmp/install_jet
+rm -f /tmp/install_jet
 #+END_SRC
 
 * Terminal utilities
 
 ** Fuzzy Finder
 #+BEGIN_SRC shell
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 #+END_SRC
 
 ** Navi
@@ -275,7 +326,7 @@ yay -S --noconfirm tree lolcat cowsay fortune-mod
 
 * Insomnia
 #+BEGIN_SRC shell
-yay -S --noconfirm insomnia
+yay -S --noconfirm insomnia insomnia-designer
 #+END_SRC
 
 * Discord
