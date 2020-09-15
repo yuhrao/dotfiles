@@ -70,19 +70,20 @@ export DOTFILES_GIT_DIR=$HOME/.dotfiles
 export DOTFILES_DEPO_URL='git@github.com:YuhriBernardes/dotfiles.git'
 git clone --bare $DOTFILES_DEPO_URL $DOTFILES_GIT_DIR
 alias cfg='/usr/bin/git --git-dir=$DOTFILES_GIT_DIR --work-tree=$HOME'
-fg config --local status.showUntrackedFiles no
+cfg config --local status.showUntrackedFiles no
 cfg checkout
 #+END_SRC
 
 * Neovim
 #+BEGIN_SRC shell
-yay -S --noconfirm nvim
+yay -S --noconfirm neovim
 #+END_SRC
 
 * Emacs (Doom)
 #+BEGIN_SRC shell
 yay  -S --noconfirm emacs27-git
 #+END_SRC
+
 ** Doom emacs
 Before start doom emacs installation, bring you Doom emacs configuration if you have some
 
