@@ -78,6 +78,8 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
+export EDITOR=/bin/emacs
+
 reload() {
 	local cache="$ZSH_CACHE_DIR"
 	autoload -U compinit zrecompile
