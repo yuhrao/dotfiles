@@ -115,8 +115,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 
 alias ls='exa --color=always --group-directories-first' # my preferred listing
-alias la='exa -la --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
+alias la='exa -lah --git --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -lh --git --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 
 alias cls='clear'
@@ -185,7 +185,6 @@ function start_agent {
     echo succeeded
     chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" > /dev/null
-    /usr/bin/ssh-add;
 }
 
 # Source SSH settings, if applicable
