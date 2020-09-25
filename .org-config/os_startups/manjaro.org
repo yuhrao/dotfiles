@@ -14,7 +14,7 @@ sudo pacman -S yay
 yay -Syu --noconfirm
 #+END_SRC
 
-* Problems solutions
+* Problem solutions
 ** Problems with cedilla
 #+BEGIN_SRC shell
 yay -S --noconfirm ibus
@@ -103,8 +103,13 @@ yay  -S --noconfirm alacritty
 * Misc
 Some facilities for terminal operation
 
+=exa=: Substitute for =ls= command
+=xclip=: Copy stdout to clipboard
+=bat=: Better file visualization (used like =cat= command)
+=bluez-utils=: Bluetooth manager
+
 #+BEGIN_SRC shell
-yay -S --noconfirm exa httpie xclip bat
+yay -S --noconfirm exa httpie xclip bat bluez-utils
 #+END_SRC
 
 * Docker
