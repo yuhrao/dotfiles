@@ -39,6 +39,7 @@
   - [[#config-git-bare-repository][Config git bare repository]]
   - [[#git][Git]]
 - [[#functions][Functions]]
+  - [[#create-gitignore-from-gitignoreio][Create Gitignore from gitignore.io]]
   - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
@@ -369,6 +370,17 @@ alias grv='git remote -v'
 #+END_SRC
 
 * Functions
+
+** Create Gitignore from [[https://gitignore.io/][gitignore.io]]
+#+BEGIN_SRC shell
+function gi {
+    echo "" > ./.gitignore
+    for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
+        gogi -create $template >> .gitignore
+    done
+}
+#+END_SRC
+
 ** Start VPN connection
 #+BEGIN_SRC shell
 vpn () {

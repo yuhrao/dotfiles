@@ -161,6 +161,13 @@ alias gra='git remote add'
 alias grup='git remote update'
 alias grv='git remote -v'
 
+function gi {
+    echo "" > ./.gitignore
+    for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
+        gogi -create $template >> .gitignore
+    done
+}
+
 vpn () {
     VPN_LOCATION="$HOME/.accesses/paygo"
 
