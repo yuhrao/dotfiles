@@ -12,4 +12,4 @@
 	user = yuhri.graziano@gmail.com
 	oauth-token=885d4608e7af1ad70c67ddf7c8c0f46cac207627
 [commit]
-	gpgsign = false
+	gpgsign = true
