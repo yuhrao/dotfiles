@@ -41,6 +41,7 @@
 - [[#functions][Functions]]
   - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
+  - [[#start-gpg-agent][Start GPG agent]]
 
 * P10k Theme
 [[https://github.com/romkatv/powerlevel10k][repo]]
@@ -411,10 +412,18 @@ if [ -f "${SSH_ENV}" ]; then
 else
     start_agent;
 fi
+#+END_SRC
 
-export GPG_TTY="$(tty)"
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent
+** Start GPG agent
+#+BEGIN_SRC shell
+function sga {
+    pkill gpg-agent
+    export GPG_TTY="$(tty)"
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpgconf --launch gpg-agent
+}
+
+sga
 #+END_SRC
 
 #+RESULTS:
