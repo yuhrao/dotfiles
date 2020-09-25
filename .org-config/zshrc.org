@@ -388,7 +388,7 @@ vpn () {
 #+END_SRC
 
 ** SSH Agent
-Start ssh agent
+Start ssh agent configured to use GPG as authentication strategy
 #+BEGIN_SRC shell
 SSH_ENV="$HOME/.ssh/agent-environment"
 
@@ -411,6 +411,10 @@ if [ -f "${SSH_ENV}" ]; then
 else
     start_agent;
 fi
+
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
 #+END_SRC
 
 #+RESULTS:
