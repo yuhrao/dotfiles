@@ -140,6 +140,8 @@ alias gsts='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gcl='git clone'
+alias gcmm="git commit -m"
+alias gcm="git commit"
 
 alias gl='git pull'
 alias glg='git log --stat'

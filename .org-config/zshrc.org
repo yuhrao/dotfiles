@@ -335,12 +335,13 @@ alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origi
 #+END_SRC
 
 ** Git
-
 #+BEGIN_SRC shell
 alias gsts='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gcl='git clone'
+alias gcmm="git commit -m"
+alias gcm="git commit"
 #+END_SRC
 
 *** Log
