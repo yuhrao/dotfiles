@@ -26,6 +26,7 @@
 - [[#environments][Environments]]
   - [[#editor][Editor]]
 - [[#aliases][Aliases]]
+  - [[#git-kraken][Git kraken]]
   - [[#reload-zsh][Reload Zsh]]
   - [[#ssh][SSH]]
   - [[#react][React]]
@@ -82,6 +83,8 @@ source $ZSH/oh-my-zsh.sh
 #+BEGIN_SRC shell
 plugins=(
     git               # git aliases and utilities
+    docker
+    docker-compose
 )
 #+END_SRC
 
@@ -151,12 +154,36 @@ source <(kubectl completion zsh) 2> /dev/null
 
 * Langs
 ** Golang
-#+BEGIN_SRC shell
-export GOPATH=~/go
-export GOBIN=$GOPATH/bin
-export GO111MODULE=on
 
-export PATH=$PATH:$GOBIN
+*** Go Modules environments
+#+BEGIN_SRC shell
+go_mod() {
+    MAIN_PATH=~/go
+    echo "dotenv" >> .envrc
+
+    echo "GOPATH=$MAIN_PATH" >> .env
+    echo "GOBIN=$MAIN_PATH/bin" >> .env
+    echo "GO111MODULE=on" >> .env
+
+    echo "PATH_add $MAIN_PATH/bin" >> .envrc
+
+    direnv allow
+    direnv reload
+}
+#+END_SRC
+
+*** Go dep environments
+#+BEGIN_SRC shell
+go_dep (){
+    echo "dotenv" >> .envrc
+
+    echo "GOPATH=$(pwd)" >> .env
+    echo "GO111MODULE=off" >> .env
+
+    direnv allow
+    direnv reload
+
+}
 #+END_SRC
 
 * Misc
@@ -197,7 +224,7 @@ Run colorcript on shell startup
 
 #+BEGIN_SRC shell
 if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
-/opt/shell-color-scripts/colorscript.sh random
+/opt/shell-color-scripts/colorscript.sh -e $(echo "32\n41\n42" | shuf -n1)
 fi
 #+END_SRC
 
@@ -227,6 +254,11 @@ export EDITOR=/bin/emacs
 #+END_SRC
 
 * Aliases
+
+** Git kraken
+#+BEGIN_SRC shell
+alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
+#+END_SRC
 
 ** Reload Zsh
 #+BEGIN_SRC shell
@@ -314,7 +346,7 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='LANG=pt_BR.utf8 && emacs'
+alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
 #+END_SRC
 *** Clojure dir locals
 Automatcally downloads the standard =.dir-locals.el= file to current directory
@@ -375,7 +407,10 @@ alias grv='git remote -v'
 ** Create Gitignore from [[https://gitignore.io/][gitignore.io]]
 #+BEGIN_SRC shell
 function gi {
-    echo "" > ./.gitignore
+    if [ "$1" != "-a" ]; then
+        echo "" > ./.gitignore
+    fi
+    GOPATH=$HOME/go
     for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
         gogi -create $template >> .gitignore
     done
@@ -403,6 +438,7 @@ vpn () {
 
 ** SSH Agent
 Start ssh agent configured to use GPG as authentication strategy
+
 #+BEGIN_SRC shell
 SSH_ENV="$HOME/.ssh/agent-environment"
 
@@ -438,5 +474,3 @@ function sga {
 
 sga
 #+END_SRC
-
-#+RESULTS:

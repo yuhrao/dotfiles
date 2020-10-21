@@ -1,7 +1,7 @@
 [user]
 	name = "Yuhri Graziano Bernardes"
 	email = "yuhri.graziano@gmail.com"
-	signingkey = 0xB07787AC8C82B9B2
+	signingKey = A1B88F04491C00D6B837CBB2B07787AC8C82B9B2
 [core]
 	editor = nvim
 	excludesfile = /home/yuhri/.gitignore_global
@@ -12,3 +12,5 @@
 	program = /usr/bin/gpg2
 [commit]
 	gpgsign = true
+[tag]
+	forceSignAnnotated = true

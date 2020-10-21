@@ -13,6 +13,8 @@ source $ZSH/oh-my-zsh.sh
 
 plugins=(
     git               # git aliases and utilities
+    docker
+    docker-compose
 )
 
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -46,11 +48,30 @@ complete -C $(which aws_completer) aws 2> /dev/null
 
 source <(kubectl completion zsh) 2> /dev/null
 
-export GOPATH=~/go
-export GOBIN=$GOPATH/bin
-export GO111MODULE=on
+go_mod() {
+    MAIN_PATH=~/go
+    echo "dotenv" >> .envrc
 
-export PATH=$PATH:$GOBIN
+    echo "GOPATH=$MAIN_PATH" >> .env
+    echo "GOBIN=$MAIN_PATH/bin" >> .env
+    echo "GO111MODULE=on" >> .env
+
+    echo "PATH_add $MAIN_PATH/bin" >> .envrc
+
+    direnv allow
+    direnv reload
+}
+
+go_dep (){
+    echo "dotenv" >> .envrc
+
+    echo "GOPATH=$(pwd)" >> .env
+    echo "GO111MODULE=off" >> .env
+
+    direnv allow
+    direnv reload
+
+}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source <(navi widget zsh)
@@ -67,7 +88,7 @@ cd_fzf (){
 bindkey -s "^[c" "cd_fzf^M"
 
 if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
-/opt/shell-color-scripts/colorscript.sh random
+/opt/shell-color-scripts/colorscript.sh -e $(echo "32\n41\n42" | shuf -n1)
 fi
 
 if [ $(command -v direnv) ] ; then
@@ -79,6 +100,8 @@ if [ -f /etc/bash.command-not-found ]; then
 fi
 
 export EDITOR=/bin/emacs
+
+alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
 
 reload() {
 	local cache="$ZSH_CACHE_DIR"
@@ -126,7 +149,7 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='LANG=pt_BR.utf8 && emacs'
+alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
 
 alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
 
@@ -164,7 +187,10 @@ alias grup='git remote update'
 alias grv='git remote -v'
 
 function gi {
-    echo "" > ./.gitignore
+    if [ "$1" != "-a" ]; then
+        echo "" > ./.gitignore
+    fi
+    GOPATH=$HOME/go
     for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
         gogi -create $template >> .gitignore
     done
@@ -172,7 +198,7 @@ function gi {
 
 vpn () {
     VPN_LOCATION="$HOME/.accesses/paygo"
-
+/opt/shell-color-scripts/colorscript.sh
     if [ $1 = office ] ;then
 
         sudo openfortivpn -c $VPN_LOCATION/office.conf
@@ -216,3 +242,5 @@ function sga {
 }
 
 sga
+
+# Batata quente
