@@ -48,6 +48,8 @@ complete -C $(which aws_completer) aws 2> /dev/null
 
 source <(kubectl completion zsh) 2> /dev/null
 
+source /opt/google-cloud-sdk/completion.zsh.inc
+
 go_mod() {
     MAIN_PATH=~/go
     echo "dotenv" >> .envrc
@@ -99,7 +101,11 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
-export EDITOR=/bin/emacs
+export TERM=alacritty
+
+export EDITOR=/usr/bin/nvim
+
+alias tmux='/usr/bin/tmux -f ~/.tmux.conf'
 
 alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
 
@@ -159,14 +165,15 @@ alias cfgs='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME status'
 alias cfgc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m'
 alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origin main'
 
+alias g='git'
 alias gsts='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gcl='git clone'
 alias gcmm="git commit -m"
 alias gcm="git commit"
-
 alias gl='git pull'
+
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'
@@ -198,7 +205,7 @@ function gi {
 
 vpn () {
     VPN_LOCATION="$HOME/.accesses/paygo"
-/opt/shell-color-scripts/colorscript.sh
+
     if [ $1 = office ] ;then
 
         sudo openfortivpn -c $VPN_LOCATION/office.conf
@@ -242,5 +249,3 @@ function sga {
 }
 
 sga
-
-# Batata quente

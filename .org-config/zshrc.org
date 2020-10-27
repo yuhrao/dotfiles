@@ -16,6 +16,7 @@
   - [[#github-cli][Github CLI]]
   - [[#aws-cli][AWS CLI]]
   - [[#kubernetes][Kubernetes]]
+  - [[#google-cloud-cli][Google Cloud CLI]]
 - [[#langs][Langs]]
   - [[#golang][Golang]]
 - [[#misc][Misc]]
@@ -24,8 +25,10 @@
   - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#environments][Environments]]
+  - [[#terminal][Terminal]]
   - [[#editor][Editor]]
 - [[#aliases][Aliases]]
+  - [[#tmux][Tmux]]
   - [[#git-kraken][Git kraken]]
   - [[#reload-zsh][Reload Zsh]]
   - [[#ssh][SSH]]
@@ -152,6 +155,11 @@ complete -C $(which aws_completer) aws 2> /dev/null
 source <(kubectl completion zsh) 2> /dev/null
 #+END_SRC
 
+** Google Cloud CLI
+#+BEGIN_SRC shell
+source /opt/google-cloud-sdk/completion.zsh.inc
+#+END_SRC
+
 * Langs
 ** Golang
 
@@ -248,12 +256,23 @@ fi
 
 * Environments
 
+** Terminal
+
+#+BEGIN_SRC shell
+export TERM=alacritty
+#+END_SRC
+
 ** Editor
 #+BEGIN_SRC shell
-export EDITOR=/bin/emacs
+export EDITOR=/usr/bin/nvim
 #+END_SRC
 
 * Aliases
+
+** Tmux
+#+BEGIN_SRC shell
+alias tmux='/usr/bin/tmux -f ~/.tmux.conf'
+#+END_SRC
 
 ** Git kraken
 #+BEGIN_SRC shell
@@ -368,17 +387,18 @@ alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origi
 
 ** Git
 #+BEGIN_SRC shell
+alias g='git'
 alias gsts='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gcl='git clone'
 alias gcmm="git commit -m"
 alias gcm="git commit"
+alias gl='git pull'
 #+END_SRC
 
 *** Log
 #+BEGIN_SRC shell
-alias gl='git pull'
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
 alias glgg='git log --graph'

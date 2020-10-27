@@ -11,41 +11,40 @@
 # set spacevim theme. by default colorscheme layer is not loaded,
 # if you want to use more colorscheme, please load the colorscheme
 # layer
-colorscheme = "dracula"
-colorscheme_bg = "dark"
+  colorscheme = "dracula"
+  colorscheme_bg = "dark"
 # Disable guicolors in basic mode, many terminal do not support 24bit
 # true colors
-enable_guicolors = true
+  enable_guicolors = true
 # Disable statusline separator, if you want to use other value, please
 # install nerd fonts
-statusline_separator = "arrow"
-statusline_inactive_separator = "arrow"
-buffer_index_type = 4
-enable_tabline_filetype_icon = true
-enable_statusline_mode = false
-filetree_direction="left"
-filemanager = "vimfiler"
-default_indent = 2
-bootstrap_before = 'myspacevim#before'
-bootstrap_after = 'myspacevim#after'
-project_rooter_patterns = ['go.mod', '.git/']
+  statusline_separator = "arrow"
+  statusline_inactive_separator = "arrow"
+  buffer_index_type = 4
+  enable_tabline_filetype_icon = true
+  enable_statusline_mode = false
+  filetree_direction="left"
+  filemanager = "vimfiler"
+  default_indent = 2
+  project_rooter_patterns = ['go.mod', 'Gopkg.toml' ,'.git/']
+  bootstrap_before = 'init#before'
 
 # Enable autocomplete layer
 [[layers]]
-name = 'autocomplete'
-auto_completion_return_key_behavior = "smart"
-auto_completion_tab_key_behavior = "smart"
+  name = 'autocomplete'
+  auto_completion_return_key_behavior = "complete"
+  auto_completion_tab_key_behavior = "smart"
 
 [[layers]]
-name = 'shell'
-default_position = 'top'
-default_height = 30
+  name = 'shell'
+  default_position = 'top'
+  default_height = 30
 
 [[layers]]
-name = "lang#go"
+  name = "lang#go"
 
 [[layers]]
-name = "format"
+  name = "format"
 
 [[layers]]
 name = "fzf"
@@ -63,3 +62,16 @@ name = "fzf"
 [[custom_plugins]]
   repo = "dracula/vim"
   merge = false
+
+[[custom_plugins]]
+  repo = "terryma/vim-multiple-cursors"
+  merge = false
+
+[[layers]]
+  name = "lang#toml"
+
+[[layers]]
+  name = "lang#dockerfile"
+
+[[layers]]
+  name = "tools"
