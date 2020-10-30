@@ -101,11 +101,13 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
+export PATH="$PATH:$HOME/go/bin"
+
 export TERM=alacritty
 
 export EDITOR=/usr/bin/nvim
 
-alias tmux='/usr/bin/tmux -f ~/.tmux.conf'
+alias t='/usr/bin/tmux -f ~/.tmux.conf'
 
 alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
 

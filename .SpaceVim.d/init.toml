@@ -75,3 +75,6 @@ name = "fzf"
 
 [[layers]]
   name = "tools"
+
+[[layers]]
+  name = "lang#python"

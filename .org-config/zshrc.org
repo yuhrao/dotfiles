@@ -25,6 +25,7 @@
   - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#environments][Environments]]
+  - [[#path][PATH]]
   - [[#terminal][Terminal]]
   - [[#editor][Editor]]
 - [[#aliases][Aliases]]
@@ -256,6 +257,15 @@ fi
 
 * Environments
 
+** PATH
+Resources added to ~PATH~:
+
+- Go binaries
+
+#+BEGIN_SRC shell
+export PATH="$PATH:$HOME/go/bin"
+#+END_SRC
+
 ** Terminal
 
 #+BEGIN_SRC shell
@@ -271,7 +281,7 @@ export EDITOR=/usr/bin/nvim
 
 ** Tmux
 #+BEGIN_SRC shell
-alias tmux='/usr/bin/tmux -f ~/.tmux.conf'
+alias t='/usr/bin/tmux -f ~/.tmux.conf'
 #+END_SRC
 
 ** Git kraken
