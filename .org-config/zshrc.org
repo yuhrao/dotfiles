@@ -43,6 +43,7 @@
   - [[#emacs][Emacs]]
   - [[#config-git-bare-repository][Config git bare repository]]
   - [[#git][Git]]
+  - [[#github-cli-1][Github CLI]]
 - [[#functions][Functions]]
   - [[#create-gitignore-from-gitignoreio][Create Gitignore from gitignore.io]]
   - [[#start-vpn-connection][Start VPN connection]]
@@ -377,11 +378,6 @@ alias dc='docker-compose'
 #+BEGIN_SRC shell
 alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
 #+END_SRC
-*** Clojure dir locals
-Automatcally downloads the standard =.dir-locals.el= file to current directory
-#+BEGIN_SRC shell
-alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
-#+END_SRC
 
 ** Config git bare repository
 
@@ -430,6 +426,13 @@ alias gr='git remote'
 alias gra='git remote add'
 alias grup='git remote update'
 alias grv='git remote -v'
+#+END_SRC
+
+** Github CLI
+*** Gists
+Fetch gists:
+#+BEGIN_SRC shell
+alias gist='navi --best-match -q "fetch gist"'
 #+END_SRC
 
 * Functions

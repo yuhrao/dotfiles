@@ -159,8 +159,6 @@ alias dc='docker-compose'
 
 alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
 
-alias eclj='https --download --out ./.dir-locals.el https://gist.githubusercontent.com/YuhriBernardes/3e6e8e1efadc03bcf42e16c92556cb2a/raw/200ea80fb4b54c882a455f6d0686bc71366ed5d6/.dir-locals.el'
-
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
 alias cfgs='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME status'
@@ -194,6 +192,8 @@ alias gr='git remote'
 alias gra='git remote add'
 alias grup='git remote update'
 alias grv='git remote -v'
+
+alias gist='navi --best-match -q "fetch gist"'
 
 function gi {
     if [ "$1" != "-a" ]; then
