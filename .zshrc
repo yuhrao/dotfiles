@@ -1,10 +1,12 @@
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+eval $(starship init zsh)
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
@@ -54,6 +56,7 @@ go_mod() {
     MAIN_PATH=~/go
     echo "dotenv" >> .envrc
 
+    echo "" > .env
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=on" >> .env
@@ -65,10 +68,18 @@ go_mod() {
 }
 
 go_dep (){
+
+    MAIN_PATH="$(pwd)"
+
     echo "dotenv" >> .envrc
 
-    echo "GOPATH=$(pwd)" >> .env
+
+    echo "" > .env
+    echo "GOPATH=$MAIN_PATH" >> .env
+    echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=off" >> .env
+
+    echo "PATH_add $MAIN_PATH/bin" >> .envrc
 
     direnv allow
     direnv reload
@@ -194,6 +205,27 @@ alias grup='git remote update'
 alias grv='git remote -v'
 
 alias gist='navi --best-match -q "fetch gist"'
+
+function emacs_prepare_go {
+    echo "Installing gore"
+    go get -u github.com/motemen/gore/cmd/gore
+    echo "Installing gocode"
+    go get -u github.com/stamblerre/gocode
+    echo "Installing godoc"
+    go get -u golang.org/x/tools/cmd/godoc
+    echo "Installing goimports"
+    go get -u golang.org/x/tools/cmd/goimports
+    echo "Installing gorename"
+    go get -u golang.org/x/tools/cmd/gorename
+    echo "Installing guru"
+    go get -u golang.org/x/tools/cmd/guru
+    echo "Installing gotest/..."
+    go get -u github.com/cweill/gotests/...
+    echo "Installing gomodifytags"
+    go get -u github.com/fatih/gomodifytags
+    echo "installing gopls"
+    go get golang.org/x/tools/gopls
+}
 
 function gi {
     if [ "$1" != "-a" ]; then

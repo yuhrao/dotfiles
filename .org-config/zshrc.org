@@ -3,6 +3,7 @@
 #+PROPERTY: header-args :tangle ~/.zshrc
 
 * Table of Contents :toc:
+- [[#starship-prompt][Starship prompt]]
 - [[#p10k-theme][P10k Theme]]
   - [[#load-p10k-source][Load p10k source]]
   - [[#load-p10k-config][Load p10k config]]
@@ -45,10 +46,16 @@
   - [[#git][Git]]
   - [[#github-cli-1][Github CLI]]
 - [[#functions][Functions]]
+  - [[#emacs-prepare-go][Emacs prepare go]]
   - [[#create-gitignore-from-gitignoreio][Create Gitignore from gitignore.io]]
   - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
+
+* Starship prompt
+#+begin_src shell
+eval $(starship init zsh)
+#+end_src
 
 * P10k Theme
 [[https://github.com/romkatv/powerlevel10k][repo]]
@@ -58,18 +65,18 @@ Powerlevel10k is a theme with powerfull feature to better shell visualization
 ** Load p10k source
 
 #+BEGIN_SRC shell
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 #+END_SRC
 
 ** Load p10k config
 [[https://github.com/romkatv/powerlevel10k#batteries-included][reference]] | [[https://github.com/romkatv/powerlevel10k#extensible][Create your own config]]
 
 #+BEGIN_SRC shell
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+END_SRC
 
 * Oh My ZSH!
@@ -171,6 +178,7 @@ go_mod() {
     MAIN_PATH=~/go
     echo "dotenv" >> .envrc
 
+    echo "" > .env
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=on" >> .env
@@ -185,10 +193,18 @@ go_mod() {
 *** Go dep environments
 #+BEGIN_SRC shell
 go_dep (){
+
+    MAIN_PATH="$(pwd)"
+
     echo "dotenv" >> .envrc
 
-    echo "GOPATH=$(pwd)" >> .env
+
+    echo "" > .env
+    echo "GOPATH=$MAIN_PATH" >> .env
+    echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=off" >> .env
+
+    echo "PATH_add $MAIN_PATH/bin" >> .envrc
 
     direnv allow
     direnv reload
@@ -436,6 +452,30 @@ alias gist='navi --best-match -q "fetch gist"'
 #+END_SRC
 
 * Functions
+
+** Emacs prepare go
+#+BEGIN_SRC shell
+function emacs_prepare_go {
+    echo "Installing gore"
+    go get -u github.com/motemen/gore/cmd/gore
+    echo "Installing gocode"
+    go get -u github.com/stamblerre/gocode
+    echo "Installing godoc"
+    go get -u golang.org/x/tools/cmd/godoc
+    echo "Installing goimports"
+    go get -u golang.org/x/tools/cmd/goimports
+    echo "Installing gorename"
+    go get -u golang.org/x/tools/cmd/gorename
+    echo "Installing guru"
+    go get -u golang.org/x/tools/cmd/guru
+    echo "Installing gotest/..."
+    go get -u github.com/cweill/gotests/...
+    echo "Installing gomodifytags"
+    go get -u github.com/fatih/gomodifytags
+    echo "installing gopls"
+    go get golang.org/x/tools/gopls
+}
+#+END_SRC
 
 ** Create Gitignore from [[https://gitignore.io/][gitignore.io]]
 #+BEGIN_SRC shell
