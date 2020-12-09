@@ -4,9 +4,6 @@
 
 * Table of Contents :toc:
 - [[#starship-prompt][Starship prompt]]
-- [[#p10k-theme][P10k Theme]]
-  - [[#load-p10k-source][Load p10k source]]
-  - [[#load-p10k-config][Load p10k config]]
 - [[#oh-my-zsh][Oh My ZSH!]]
 - [[#asdf-vm][ASDF VM]]
 - [[#zsh-plugins][ZSH Plugins]]
@@ -16,6 +13,7 @@
   - [[#asdf-vm-1][ASDF VM]]
   - [[#github-cli][Github CLI]]
   - [[#aws-cli][AWS CLI]]
+  - [[#starship][Starship]]
   - [[#kubernetes][Kubernetes]]
   - [[#google-cloud-cli][Google Cloud CLI]]
 - [[#langs][Langs]]
@@ -57,7 +55,7 @@
 eval $(starship init zsh)
 #+end_src
 
-* P10k Theme
+* COMMENT P10k Theme
 [[https://github.com/romkatv/powerlevel10k][repo]]
 
 Powerlevel10k is a theme with powerfull feature to better shell visualization
@@ -65,18 +63,18 @@ Powerlevel10k is a theme with powerfull feature to better shell visualization
 ** Load p10k source
 
 #+BEGIN_SRC shell
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 #+END_SRC
 
 ** Load p10k config
 [[https://github.com/romkatv/powerlevel10k#batteries-included][reference]] | [[https://github.com/romkatv/powerlevel10k#extensible][Create your own config]]
 
 #+BEGIN_SRC shell
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 #+END_SRC
 
 * Oh My ZSH!
@@ -156,6 +154,12 @@ eval $(gh completion -s zsh 2> /dev/null)
 #+BEGIN_SRC shell
 complete -C $(which aws_completer) aws 2> /dev/null
 #+END_SRC
+
+** Starship
+
+#+begin_src shell
+eval $(starship completions zsh 2> /dev/null)
+#+end_src
 
 ** Kubernetes
 - kubectl cli

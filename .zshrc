@@ -1,13 +1,5 @@
 eval $(starship init zsh)
 
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
@@ -47,6 +39,8 @@ autoload -Uz compinit && compinit
 eval $(gh completion -s zsh 2> /dev/null)
 
 complete -C $(which aws_completer) aws 2> /dev/null
+
+eval $(starship completions zsh 2> /dev/null)
 
 source <(kubectl completion zsh) 2> /dev/null
 
