@@ -147,7 +147,18 @@ if [ -f /etc/bash.command-not-found ]; then
 fi
 
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
+alias tl='t ls'
+alias tn='t new'
+alias tns='t new -t'
+alias tks='t kill-session -t'
+
 alias tm='/usr/bin/tmuxinator'
+alias tms='tm start'
+alias tmd='tm delete'
+alias tml='tm ls'
+alias tme='tm edit'
+alias tmn='tm new'
+alias tmp='tm implode'
 
 alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
 
