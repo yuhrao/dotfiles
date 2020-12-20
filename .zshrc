@@ -110,9 +110,10 @@ export PATH="$PATH:$HOME/go/bin"
 
 export TERM=alacritty
 
-export EDITOR=/usr/bin/nvim
+export EDITOR=/usr/bin/emacs
 
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
+alias tm='/usr/bin/tmuxinator'
 
 alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
 
@@ -162,7 +163,7 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
+alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs & disown %/usr/bin/emacs'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'

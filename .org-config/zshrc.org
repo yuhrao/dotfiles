@@ -295,7 +295,7 @@ export TERM=alacritty
 
 ** Editor
 #+BEGIN_SRC shell
-export EDITOR=/usr/bin/nvim
+export EDITOR=/usr/bin/emacs
 #+END_SRC
 
 * Aliases
@@ -303,6 +303,7 @@ export EDITOR=/usr/bin/nvim
 ** Tmux
 #+BEGIN_SRC shell
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
+alias tm='/usr/bin/tmuxinator'
 #+END_SRC
 
 ** Git kraken
@@ -396,7 +397,7 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='LANG=pt_BR.utf8 && emacs & disown %emacs'
+alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs & disown %/usr/bin/emacs'
 #+END_SRC
 
 ** Config git bare repository
