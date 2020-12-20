@@ -1,3 +1,11 @@
+export PATH="$PATH:$HOME/go/bin"
+
+export TERM=alacritty
+
+export EDITOR=/usr/bin/emacs
+
+export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
+
 eval $(starship init zsh)
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -7,8 +15,6 @@ source $ZSH/oh-my-zsh.sh
 
 plugins=(
     git               # git aliases and utilities
-    docker
-    docker-compose
 )
 
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -33,24 +39,50 @@ zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 
-fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
+if [ ! -f $ZSH_COMP_DIR/_docker-compose ]; then
+    echo "Fetching docker completions"
+    curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completion/zsh/_docker-compose > $ZSH_COMP_DIR/_docker-compose
+fi
+
+if [ -d $ASDF_DIR ]; then
+    fpath=($ZSH_COMP_DIR/ ${ASDF_DIR}/completions/ $fpath)
+fi
+
 autoload -Uz compinit && compinit
 
-eval $(gh completion -s zsh 2> /dev/null)
+if [ $(command -v aws_completer) ]; then
+    complete -C aws_completer aws
+fi
 
-complete -C $(which aws_completer) aws 2> /dev/null
+if [ $(command -v kubectl) ]; then
+    source <(kubectl completion zsh) 2> /dev/null
+fi
+if [ $(command -v minikube) ]; then
+    source <(minikube completion zsh) 2> /dev/null
+fi
+if [ $(command -v helm) ]; then
+    source <(helm completion zsh) 2> /dev/null
+fi
 
-eval $(starship completions zsh 2> /dev/null)
-
-source <(kubectl completion zsh) 2> /dev/null
-
-source /opt/google-cloud-sdk/completion.zsh.inc
+if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
+    source /opt/google-cloud-sdk/completion.zsh.inc
+fi
 
 go_mod() {
     MAIN_PATH=~/go
-    echo "dotenv" >> .envrc
+    
+    if [[ ! -f ./.envrc ]]; then
+        echo "dotenv" > .envrc
+    else
+        echo "dotenv" >> .envrc
+    fi
 
-    echo "" > .env
+    if [[ -f ./.env ]]; then
+        echo "" >> .env
+    else
+        touch .env
+    fi
+
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=on" >> .env
@@ -65,10 +97,19 @@ go_dep (){
 
     MAIN_PATH="$(pwd)"
 
-    echo "dotenv" >> .envrc
+    if [[ ! -f ./.envrc ]]; then
+        echo "dotenv" > .envrc
+    else
+        echo "dotenv" >> .envrc
+    fi
 
 
-    echo "" > .env
+    if [[ -f ./.env ]]; then
+        echo "" >> .env
+    else
+        touch .env
+    fi
+    
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=off" >> .env
@@ -80,16 +121,15 @@ go_dep (){
 
 }
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source <(navi widget zsh)
-
 export FZF_DEFAULT_OPS="--extended"
 export FZF_DEFAULT_COMMAND="fd --hidden --type f"
 export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 cd_fzf (){
-    cd $HOME && cd $(fd --hidden -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
-    clear
+    local goto_path=$(fd --hidden -t d . $HOME | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+    if [ goto_path ]; then
+        cd $goto_path
+    fi
 }
 
 bindkey -s "^[c" "cd_fzf^M"
@@ -105,12 +145,6 @@ fi
 if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
-
-export PATH="$PATH:$HOME/go/bin"
-
-export TERM=alacritty
-
-export EDITOR=/usr/bin/emacs
 
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
 alias tm='/usr/bin/tmuxinator'

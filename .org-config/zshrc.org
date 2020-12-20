@@ -3,6 +3,11 @@
 #+PROPERTY: header-args :tangle ~/.zshrc
 
 * Table of Contents :toc:
+- [[#environments][Environments]]
+  - [[#path][PATH]]
+  - [[#terminal][Terminal]]
+  - [[#editor][Editor]]
+  - [[#zsh-completion-directories][ZSH Completion directories]]
 - [[#starship-prompt][Starship prompt]]
 - [[#oh-my-zsh][Oh My ZSH!]]
 - [[#asdf-vm][ASDF VM]]
@@ -10,10 +15,8 @@
   - [[#embedded-plugin-manager][Embedded Plugin Manager]]
   - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
 - [[#compleations][Compleations]]
-  - [[#asdf-vm-1][ASDF VM]]
-  - [[#github-cli][Github CLI]]
+  - [[#local-completions-files][Local completions files]]
   - [[#aws-cli][AWS CLI]]
-  - [[#starship][Starship]]
   - [[#kubernetes][Kubernetes]]
   - [[#google-cloud-cli][Google Cloud CLI]]
 - [[#langs][Langs]]
@@ -23,10 +26,6 @@
   - [[#random-colorscript][Random Colorscript]]
   - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
-- [[#environments][Environments]]
-  - [[#path][PATH]]
-  - [[#terminal][Terminal]]
-  - [[#editor][Editor]]
 - [[#aliases][Aliases]]
   - [[#tmux][Tmux]]
   - [[#git-kraken][Git kraken]]
@@ -42,13 +41,40 @@
   - [[#emacs][Emacs]]
   - [[#config-git-bare-repository][Config git bare repository]]
   - [[#git][Git]]
-  - [[#github-cli-1][Github CLI]]
+  - [[#github-cli][Github CLI]]
 - [[#functions][Functions]]
   - [[#emacs-prepare-go][Emacs prepare go]]
   - [[#create-gitignore-from-gitignoreio][Create Gitignore from gitignore.io]]
   - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
+
+* Environments
+
+** PATH
+Resources added to ~PATH~:
+
+- Go binaries
+
+#+BEGIN_SRC shell
+export PATH="$PATH:$HOME/go/bin"
+#+END_SRC
+
+** Terminal
+
+#+BEGIN_SRC shell
+export TERM=alacritty
+#+END_SRC
+
+** Editor
+#+BEGIN_SRC shell
+export EDITOR=/usr/bin/emacs
+#+END_SRC
+
+** ZSH Completion directories
+#+begin_src shell
+export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
+#+end_src
 
 * Starship prompt
 #+begin_src shell
@@ -93,8 +119,6 @@ source $ZSH/oh-my-zsh.sh
 #+BEGIN_SRC shell
 plugins=(
     git               # git aliases and utilities
-    docker
-    docker-compose
 )
 #+END_SRC
 
@@ -106,7 +130,6 @@ plugins=(
 These scripts was added automatcally by the installer. (see Installation link above)
 
 #+BEGIN_SRC shell
-
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
@@ -137,40 +160,56 @@ zplugin light zsh-users/zsh-autosuggestions
 #+END_SRC
 
 * Compleations
-** ASDF VM
 
+** Local completions files
+*** Docker and Docker-Compose
+#+begin_src shell
+if [ ! -f $ZSH_COMP_DIR/_docker-compose ]; then
+    echo "Fetching docker completions"
+    curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completion/zsh/_docker-compose > $ZSH_COMP_DIR/_docker-compose
+fi
+#+end_src
+
+*** ASDF VM
 #+BEGIN_SRC shell
-fpath=($HOME/.zsh/completions/ ${ASDF_DIR}/completions/ $fpath)
+if [ -d $ASDF_DIR ]; then
+    fpath=($ZSH_COMP_DIR/ ${ASDF_DIR}/completions/ $fpath)
+fi
+#+END_SRC
+
+*** Finish
+#+begin_src shell
 autoload -Uz compinit && compinit
-#+END_SRC
-** Github CLI
-
-#+BEGIN_SRC shell
-eval $(gh completion -s zsh 2> /dev/null)
-#+END_SRC
+#+end_src
 
 ** AWS CLI
 
 #+BEGIN_SRC shell
-complete -C $(which aws_completer) aws 2> /dev/null
+if [ $(command -v aws_completer) ]; then
+    complete -C aws_completer aws
+fi
 #+END_SRC
-
-** Starship
-
-#+begin_src shell
-eval $(starship completions zsh 2> /dev/null)
-#+end_src
 
 ** Kubernetes
 - kubectl cli
 
 #+BEGIN_SRC shell
-source <(kubectl completion zsh) 2> /dev/null
+if [ $(command -v kubectl) ]; then
+    source <(kubectl completion zsh) 2> /dev/null
+fi
+if [ $(command -v minikube) ]; then
+    source <(minikube completion zsh) 2> /dev/null
+fi
+if [ $(command -v helm) ]; then
+    source <(helm completion zsh) 2> /dev/null
+fi
 #+END_SRC
 
 ** Google Cloud CLI
 #+BEGIN_SRC shell
-source /opt/google-cloud-sdk/completion.zsh.inc
+if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
+    source /opt/google-cloud-sdk/completion.zsh.inc
+fi
 #+END_SRC
 
 * Langs
@@ -180,9 +219,19 @@ source /opt/google-cloud-sdk/completion.zsh.inc
 #+BEGIN_SRC shell
 go_mod() {
     MAIN_PATH=~/go
-    echo "dotenv" >> .envrc
+    
+    if [[ ! -f ./.envrc ]]; then
+        echo "dotenv" > .envrc
+    else
+        echo "dotenv" >> .envrc
+    fi
 
-    echo "" > .env
+    if [[ -f ./.env ]]; then
+        echo "" >> .env
+    else
+        touch .env
+    fi
+
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=on" >> .env
@@ -200,10 +249,19 @@ go_dep (){
 
     MAIN_PATH="$(pwd)"
 
-    echo "dotenv" >> .envrc
+    if [[ ! -f ./.envrc ]]; then
+        echo "dotenv" > .envrc
+    else
+        echo "dotenv" >> .envrc
+    fi
 
 
-    echo "" > .env
+    if [[ -f ./.env ]]; then
+        echo "" >> .env
+    else
+        touch .env
+    fi
+    
     echo "GOPATH=$MAIN_PATH" >> .env
     echo "GOBIN=$MAIN_PATH/bin" >> .env
     echo "GO111MODULE=off" >> .env
@@ -221,12 +279,6 @@ go_dep (){
 fzf: [[https://github.com/junegunn/fzf#installation][install]] | [[https://github.com/junegunn/fzf#usage][usage]]
 navi: [[https://github.com/denisidoro/navi#installation][install]] | [[https://github.com/denisidoro/navi#usage][usage]]
 
-*** Load sources
-#+BEGIN_SRC shell
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source <(navi widget zsh)
-#+END_SRC
-
 *** Fzf default commands
 
 #+BEGIN_SRC shell
@@ -242,8 +294,10 @@ export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 #+BEGIN_SRC shell
 cd_fzf (){
-    cd $HOME && cd $(fd --hidden -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
-    clear
+    local goto_path=$(fd --hidden -t d . $HOME | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
+    if [ goto_path ]; then
+        cd $goto_path
+    fi
 }
 
 bindkey -s "^[c" "cd_fzf^M"
@@ -274,28 +328,6 @@ load bash insulter
 if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
-#+END_SRC
-
-* Environments
-
-** PATH
-Resources added to ~PATH~:
-
-- Go binaries
-
-#+BEGIN_SRC shell
-export PATH="$PATH:$HOME/go/bin"
-#+END_SRC
-
-** Terminal
-
-#+BEGIN_SRC shell
-export TERM=alacritty
-#+END_SRC
-
-** Editor
-#+BEGIN_SRC shell
-export EDITOR=/usr/bin/emacs
 #+END_SRC
 
 * Aliases
