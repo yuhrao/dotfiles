@@ -326,7 +326,7 @@ cursor:
   #   - ▇ Block
   #   - _ Underline
   #   - | Beam
-  style: Beam
+  style: Block
 
   # Vi mode cursor style
   #
@@ -334,7 +334,7 @@ cursor:
   # the style of the active value of the normal cursor.
   #
   # See `cursor.style` for available options.
-  vi_mode_style: Block
+  # vi_mode_style: Block
 
   # If this is `true`, the cursor will be rendered as a hollow box when the
   # window is not focused.
@@ -619,9 +619,9 @@ shell:
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
-key_bindings:
-  - { key: Escape, mode: ~Vi, action: ToggleViMode }
-  - { key: G, mods: Control, mode: Vi, action: ToggleViMode }
+# key_bindings:
+# - { key: Escape, mode: ~Vi, action: ToggleViMode }
+# - { key: G, mods: Control, mode: Vi, action: ToggleViMode }
 #- { key: Paste,                                action: Paste          }
 #- { key: Copy,                                 action: Copy           }
 #- { key: L,         mods: Control,             action: ClearLogNotice }
