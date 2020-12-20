@@ -91,6 +91,10 @@ go_mod() {
 
     direnv allow
     direnv reload
+
+    if [ ! -f ./go.mod ] && [ ! -z "$1" ]; then
+        go mod init $1
+    fi
 }
 
 go_dep (){
