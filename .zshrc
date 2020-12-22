@@ -125,6 +125,8 @@ go_dep (){
 
 }
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 export FZF_DEFAULT_OPS="--extended"
 export FZF_DEFAULT_COMMAND="fd --hidden --type f"
 export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
@@ -212,7 +214,7 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs & disown %/usr/bin/emacs'
+alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'

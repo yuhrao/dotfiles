@@ -286,6 +286,8 @@ navi: [[https://github.com/denisidoro/navi#installation][install]] | [[https://g
 *** Fzf default commands
 
 #+BEGIN_SRC shell
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 export FZF_DEFAULT_OPS="--extended"
 export FZF_DEFAULT_COMMAND="fd --hidden --type f"
 export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
@@ -447,7 +449,7 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs & disown %/usr/bin/emacs'
+alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 #+END_SRC
 
 ** Config git bare repository
