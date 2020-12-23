@@ -39,8 +39,12 @@ zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-completions
 zplugin light zsh-users/zsh-autosuggestions
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/usr/local/etc/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/path.zsh.inc'; fi
+
 if [ ! -f $ZSH_COMP_DIR/_docker-compose ]; then
-    echo "Fetching docker completions"
+    echo "Fetching docker completions on $ZSH_COMP_DIR"
+    mkdir -p $ZSH_COMP_DIR
     curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completion/zsh/_docker-compose > $ZSH_COMP_DIR/_docker-compose
 fi
 
@@ -53,6 +57,9 @@ autoload -Uz compinit && compinit
 if [ $(command -v aws_completer) ]; then
     complete -C aws_completer aws
 fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/usr/local/etc/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/completion.zsh.inc'; fi
 
 if [ $(command -v kubectl) ]; then
     source <(kubectl completion zsh) 2> /dev/null
