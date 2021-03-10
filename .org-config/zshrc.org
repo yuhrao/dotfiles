@@ -19,6 +19,7 @@
 - [[#completions][Completions]]
   - [[#local-completions-files][Local completions files]]
   - [[#aws-cli][AWS CLI]]
+  - [[#google-cloud-1][Google Cloud]]
   - [[#kubernetes][Kubernetes]]
   - [[#google-cloud-cli][Google Cloud CLI]]
 - [[#langs][Langs]]
@@ -59,7 +60,7 @@ Resources added to ~PATH~:
 - Go binaries
 
 #+BEGIN_SRC shell
-export PATH="$PATH:$HOME/go/bin"
+export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
 #+END_SRC
 
 ** Terminal
@@ -233,6 +234,15 @@ fi
 * Langs
 ** Golang
 
+*** Go flat envs to install packages
+#+begin_src shell
+go_flat(){
+    export GOPATH=~/go
+    export GOBIN="$GOPATH/bin"
+    export GO111MODULE=on
+}
+#+end_src
+
 *** Go Modules environments
 #+BEGIN_SRC shell
 go_mod() {
@@ -331,8 +341,8 @@ bindkey -s "^[c" "cd_fzf^M"
 Run colorcript on shell startup
 
 #+BEGIN_SRC shell
-if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
-/opt/shell-color-scripts/colorscript.sh -e $(echo "32\n41\n42" | shuf -n1)
+if [ -f $(which colorscript) ] ; then
+colorscript -e $(echo "32\n41\n42" | shuf -n1)
 fi
 #+END_SRC
 
@@ -359,6 +369,8 @@ fi
 ** Tmux
 #+BEGIN_SRC shell
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
+alias ta='t attach'
+alias tas='t attach -t'
 alias tl='t ls'
 alias tn='t new'
 alias tns='t new -t'
@@ -467,7 +479,7 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+alias emacs='/usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 #+END_SRC
 
 ** Config git bare repository

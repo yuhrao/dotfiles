@@ -1,5 +1,5 @@
 [user]
-	name = "Yuhri Graziano Bernardes"
+	name = Yuhri Bernardes
 	email = "yuhri.graziano@gmail.com"
 	signingKey = A1B88F04491C00D6B837CBB2B07787AC8C82B9B2
 [core]
@@ -14,3 +14,17 @@
 	gpgsign = true
 [tag]
 	forceSignAnnotated = true
+
+[init]
+	defaultBranch = "master"
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
+[includeIf "gitdir:~/code/bexs/"]
+    path = ~/code/bexs/.gitconfig
+
+[credential]
+	helper = store
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/

@@ -1,4 +1,4 @@
-export PATH="$PATH:$HOME/go/bin"
+export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
 
 export TERM=alacritty
 
@@ -75,6 +75,12 @@ if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
     source /opt/google-cloud-sdk/completion.zsh.inc
 fi
 
+go_flat(){
+    export GOPATH=~/go
+    export GOBIN="$GOPATH/bin"
+    export GO111MODULE=on
+}
+
 go_mod() {
     MAIN_PATH=~/go
     
@@ -147,8 +153,8 @@ cd_fzf (){
 
 bindkey -s "^[c" "cd_fzf^M"
 
-if [ -f /opt/shell-color-scripts/colorscript.sh ] ; then
-/opt/shell-color-scripts/colorscript.sh -e $(echo "32\n41\n42" | shuf -n1)
+if [ -f $(which colorscript) ] ; then
+colorscript -e $(echo "32\n41\n42" | shuf -n1)
 fi
 
 if [ $(command -v direnv) ] ; then
@@ -160,6 +166,8 @@ if [ -f /etc/bash.command-not-found ]; then
 fi
 
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
+alias ta='t attach'
+alias tas='t attach -t'
 alias tl='t ls'
 alias tn='t new'
 alias tns='t new -t'
@@ -221,7 +229,7 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='LANG=pt_BR.utf8 && /usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+alias emacs='/usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
