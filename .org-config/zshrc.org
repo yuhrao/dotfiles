@@ -366,6 +366,11 @@ fi
 
 * Aliases
 
+** ctop
+#+begin_src shell
+alias ctop='TERM=xterm-256color ctop'
+#+end_src
+
 ** Tmux
 #+BEGIN_SRC shell
 alias t='/usr/bin/tmux -f ~/.tmux.conf'

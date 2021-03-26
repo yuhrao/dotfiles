@@ -165,6 +165,8 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
+alias ctop='TERM=xterm-256color ctop'
+
 alias t='/usr/bin/tmux -f ~/.tmux.conf'
 alias ta='t attach'
 alias tas='t attach -t'

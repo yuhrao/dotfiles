@@ -78,3 +78,9 @@ name = "fzf"
 
 [[layers]]
   name = "lang#python"
+
+[[layers]]
+  name="lsp"
+  filetypes=[
+    "go"
+  ]
