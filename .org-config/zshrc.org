@@ -351,7 +351,7 @@ fi
 Manage environment variables
 #+BEGIN_SRC shell
 if [ $(command -v direnv) ] ; then
-    eval "$(direnv hook zsh)"
+    eval "$(asdf exec direnv hook zsh)"
 fi
 #+END_SRC
 
@@ -484,7 +484,7 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='/usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+alias emacs='$(which emacs) --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 #+END_SRC
 
 ** Config git bare repository

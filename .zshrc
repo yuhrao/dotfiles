@@ -158,7 +158,7 @@ colorscript -e $(echo "32\n41\n42" | shuf -n1)
 fi
 
 if [ $(command -v direnv) ] ; then
-    eval "$(direnv hook zsh)"
+    eval "$(asdf exec direnv hook zsh)"
 fi
 
 if [ -f /etc/bash.command-not-found ]; then
@@ -231,7 +231,7 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='/usr/bin/emacs --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+alias emacs='$(which emacs) --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
