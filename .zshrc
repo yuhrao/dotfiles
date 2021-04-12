@@ -75,11 +75,10 @@ if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
     source /opt/google-cloud-sdk/completion.zsh.inc
 fi
 
-go_flat(){
-    export GOPATH=~/go
-    export GOBIN="$GOPATH/bin"
-    export GO111MODULE=on
-}
+export GOPATH=~/go
+export GOBIN="$GOPATH/bin"
+export GO111MODULE=on
+export PATH=$GOBIN:$PATH
 
 go_mod() {
     MAIN_PATH=~/go
@@ -144,17 +143,8 @@ export FZF_DEFAULT_OPS="--extended"
 export FZF_DEFAULT_COMMAND="fd --hidden --type f"
 export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
-cd_fzf (){
-    local goto_path=$(fd --hidden -t d . $HOME | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
-    if [ goto_path ]; then
-        cd $goto_path
-    fi
-}
-
-bindkey -s "^[c" "cd_fzf^M"
-
-if [ -f $(which colorscript) ] ; then
-colorscript -e $(echo "32\n41\n42" | shuf -n1)
+if [ $(command -v neofetch) ] ; then
+    neofetch
 fi
 
 if [ $(command -v direnv) ] ; then
@@ -164,6 +154,9 @@ fi
 if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
+
+alias k=kubectk
+alias kgpa='kubectl get pods --all-namespaces'
 
 alias ctop='TERM=xterm-256color ctop'
 
@@ -183,7 +176,7 @@ alias tme='tm edit'
 alias tmn='tm new'
 alias tmp='tm implode'
 
-alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
+alias gitkraken='gitkraken > /dev/null &!'
 
 reload() {
 	local cache="$ZSH_CACHE_DIR"
@@ -231,7 +224,8 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-alias emacs='$(which emacs) --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+export EMACS_BIN=$(which emacs)
+alias emacs='$EMACS_BIN &!'
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
