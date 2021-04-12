@@ -1,3 +1,13 @@
+source /home/yuhri/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zdharma/fast-syntax-highlighting
+antigen bundle zsh-users/zsh-completions
+
+antigen apply
+
 export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
 
 export TERM=alacritty
@@ -8,36 +18,7 @@ export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 
 eval $(starship init zsh)
 
-export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
-
 . $HOME/.asdf/asdf.sh
-
-plugins=(
-    git               # git aliases and utilities
-)
-
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-zinit light-mode for \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-
-zplugin light zdharma/fast-syntax-highlighting
-
-zplugin light zsh-users/zsh-completions
-zplugin light zsh-users/zsh-autosuggestions
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/usr/local/etc/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/path.zsh.inc'; fi
@@ -204,8 +185,6 @@ reload() {
 }
 
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
-
-alias cra='create-react-app'
 
 alias pbcopy='xclip -selection clipboard'
 

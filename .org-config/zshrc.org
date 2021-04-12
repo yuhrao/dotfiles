@@ -3,17 +3,17 @@
 #+PROPERTY: header-args :tangle ~/.zshrc
 
 * Table of Contents :toc:
+- [[#load-antigen][Load antigen]]
+  - [[#oh-my-zsh][Oh My ZSH!]]
+  - [[#zsh-plugins][ZSH Plugins]]
+  - [[#apply-antigen][Apply antigen]]
 - [[#environments][Environments]]
   - [[#path][PATH]]
   - [[#terminal][Terminal]]
   - [[#editor][Editor]]
   - [[#zsh-completion-directories][ZSH Completion directories]]
 - [[#starship-prompt][Starship prompt]]
-- [[#oh-my-zsh][Oh My ZSH!]]
 - [[#asdf-vm][ASDF VM]]
-- [[#zsh-plugins][ZSH Plugins]]
-  - [[#embedded-plugin-manager][Embedded Plugin Manager]]
-  - [[#zinit-plugin-manaeger][Zinit Plugin Manaeger]]
 - [[#google-cloud][Google cloud]]
   - [[#initialize][Initialize]]
 - [[#completions][Completions]]
@@ -26,15 +26,16 @@
   - [[#golang][Golang]]
 - [[#misc][Misc]]
   - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
-  - [[#random-colorscript][Random Colorscript]]
+  - [[#neofetch][Neofetch]]
   - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
+  - [[#kubectl][Kubectl]]
+  - [[#ctop][ctop]]
   - [[#tmux][Tmux]]
   - [[#git-kraken][Git kraken]]
   - [[#reload-zsh][Reload Zsh]]
   - [[#ssh][SSH]]
-  - [[#react][React]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
   - [[#navigate-to-parent-directories][Navigate to parent directories]]
   - [[#switch-ls-to-use-exa-cli][Switch `ls` to use `exa` cli]]
@@ -51,6 +52,29 @@
   - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
+
+* Load antigen
+#+begin_src sh
+source /home/yuhri/antigen.zsh
+#+end_src
+
+** Oh My ZSH!
+#+BEGIN_SRC shell
+antigen use oh-my-zsh
+#+END_SRC
+
+** ZSH Plugins
+
+#+BEGIN_SRC shell
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zdharma/fast-syntax-highlighting
+antigen bundle zsh-users/zsh-completions
+#+END_SRC
+
+** Apply antigen
+#+begin_src shell
+antigen apply
+#+end_src
 
 * Environments
 
@@ -84,84 +108,10 @@ export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 eval $(starship init zsh)
 #+end_src
 
-* COMMENT P10k Theme
-[[https://github.com/romkatv/powerlevel10k][repo]]
-
-Powerlevel10k is a theme with powerfull feature to better shell visualization
-
-** Load p10k source
-
-#+BEGIN_SRC shell
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-ZSH_THEME="powerlevel10k/powerlevel10k"
-#+END_SRC
-
-** Load p10k config
-[[https://github.com/romkatv/powerlevel10k#batteries-included][reference]] | [[https://github.com/romkatv/powerlevel10k#extensible][Create your own config]]
-
-#+BEGIN_SRC shell
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-#+END_SRC
-
-* Oh My ZSH!
-#+BEGIN_SRC shell
-export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
-#+END_SRC
-
 * ASDF VM
 #+BEGIN_SRC shell
 . $HOME/.asdf/asdf.sh
 #+END_SRC
-* ZSH Plugins
-** Embedded Plugin Manager
-
-#+BEGIN_SRC shell
-plugins=(
-    git               # git aliases and utilities
-)
-#+END_SRC
-
-** Zinit Plugin Manaeger
-
-[[https://github.com/zdharma/zinit#installation][Installation]] | [[https://github.com/zdharma/zinit#usage][Usage]]
-
-*** Startup
-These scripts was added automatcally by the installer. (see Installation link above)
-
-#+BEGIN_SRC shell
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-zinit light-mode for \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-#+END_SRC
-
-*** Syntax highlit
-#+BEGIN_SRC shell
-zplugin light zdharma/fast-syntax-highlighting
-#+END_SRC
-
-*** Autocompleation
-#+BEGIN_SRC shell
-zplugin light zsh-users/zsh-completions
-zplugin light zsh-users/zsh-autosuggestions
-#+END_SRC
-
 * Google cloud
 ** Initialize
 #+begin_src shell
@@ -236,11 +186,10 @@ fi
 
 *** Go flat envs to install packages
 #+begin_src shell
-go_flat(){
-    export GOPATH=~/go
-    export GOBIN="$GOPATH/bin"
-    export GO111MODULE=on
-}
+export GOPATH=~/go
+export GOBIN="$GOPATH/bin"
+export GO111MODULE=on
+export PATH=$GOBIN:$PATH
 #+end_src
 
 *** Go Modules environments
@@ -321,28 +270,11 @@ export FZF_DEFAULT_COMMAND="fd --hidden --type f"
 export FZF_DEFAULT_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 #+END_SRC
 
-*** Custom `cd` command for fzf
-- Use `fd` command to get directories
-- Configure space key for toggle preview
-- Configure preview for show dir content
+** Neofetch
 
 #+BEGIN_SRC shell
-cd_fzf (){
-    local goto_path=$(fd --hidden -t d . $HOME | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)
-    if [ goto_path ]; then
-        cd $goto_path
-    fi
-}
-
-bindkey -s "^[c" "cd_fzf^M"
-#+END_SRC
-
-** Random Colorscript
-Run colorcript on shell startup
-
-#+BEGIN_SRC shell
-if [ -f $(which colorscript) ] ; then
-colorscript -e $(echo "32\n41\n42" | shuf -n1)
+if [ $(command -v neofetch) ] ; then
+    neofetch
 fi
 #+END_SRC
 
@@ -355,6 +287,8 @@ if [ $(command -v direnv) ] ; then
 fi
 #+END_SRC
 
+#+RESULTS:
+
 ** Bash insulter
 load bash insulter
 
@@ -365,6 +299,12 @@ fi
 #+END_SRC
 
 * Aliases
+
+** Kubectl
+#+begin_src shell
+alias k=kubectk
+alias kgpa='kubectl get pods --all-namespaces'
+#+end_src
 
 ** ctop
 #+begin_src shell
@@ -395,7 +335,7 @@ alias tmp='tm implode'
 
 ** Git kraken
 #+BEGIN_SRC shell
-alias gitkraken='gitkraken > /dev/null & disown %gitkraken'
+alias gitkraken='gitkraken > /dev/null &!'
 #+END_SRC
 
 ** Reload Zsh
@@ -434,10 +374,6 @@ reload() {
 alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
 #+END_SRC
 
-** React
-#+BEGIN_SRC shell
-alias cra='create-react-app'
-#+END_SRC
 ** Copy output to clipboard
 
 #+BEGIN_SRC shell
@@ -484,7 +420,8 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-alias emacs='$(which emacs) --execute "(projectile-clear-known-projects)" & disown %/usr/bin/emacs'
+export EMACS_BIN=$(which emacs)
+alias emacs='$EMACS_BIN &!'
 #+END_SRC
 
 ** Config git bare repository
@@ -639,3 +576,4 @@ function sga {
 
 sga
 #+END_SRC
+
