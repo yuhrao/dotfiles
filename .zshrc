@@ -1,16 +1,21 @@
-source /home/yuhri/antigen.zsh
+source ~/.zplug/init.zsh
 
-antigen use oh-my-zsh
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zdharma/fast-syntax-highlighting"
+zplug "zsh-users/zsh-completions"
 
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zdharma/fast-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
-antigen apply
+zplug load
 
 export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
 
-export TERM=alacritty
+# export TERM=alacritty
 
 export EDITOR=/usr/bin/emacs
 
@@ -291,25 +296,25 @@ vpn () {
 
 SSH_ENV="$HOME/.ssh/agent-environment"
 
-function start_agent {
-    echo "Initialising new SSH agent..."
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    echo succeeded
-    chmod 600 "${SSH_ENV}"
-    . "${SSH_ENV}" > /dev/null
-}
-
+# function start_agent {
+#     echo "Initialising new SSH agent..."
+#     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+#     echo succeeded
+#     chmod 600 "${SSH_ENV}"
+#     . "${SSH_ENV}" > /dev/null
+# }
+# 
 # Source SSH settings, if applicable
-
-if [ -f "${SSH_ENV}" ]; then
-    . "${SSH_ENV}" > /dev/null
-    #ps ${SSH_AGENT_PID} doesn't work under cywgin
-    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-        start_agent;
-    }
-else
-    start_agent;
-fi
+# 
+# if [ -f "${SSH_ENV}" ]; then
+#     . "${SSH_ENV}" > /dev/null
+#     ps ${SSH_AGENT_PID} doesn't work under cywgin
+#     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+#         start_agent;
+#     }
+# else
+#     start_agent;
+# fi
 
 function sga {
     pkill gpg-agent
