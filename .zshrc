@@ -21,6 +21,12 @@ export EDITOR=/usr/bin/emacs
 
 export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
 eval $(starship init zsh)
 
 . $HOME/.asdf/asdf.sh
@@ -40,9 +46,9 @@ fi
 
 autoload -Uz compinit && compinit
 
-if [ $(command -v aws_completer) ]; then
-    complete -C aws_completer aws
-fi
+# if [ $(command -v aws_completer) ]; then
+#     complete -C aws_completer aws
+# fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/usr/local/etc/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/completion.zsh.inc'; fi
