@@ -3,17 +3,21 @@
 #+PROPERTY: header-args :tangle ~/.zshrc
 
 * Table of Contents :toc:
-- [[#load-antigen][Load antigen]]
-  - [[#oh-my-zsh][Oh My ZSH!]]
-  - [[#zsh-plugins][ZSH Plugins]]
-  - [[#apply-antigen][Apply antigen]]
-- [[#environments][Environments]]
-  - [[#path][PATH]]
-  - [[#terminal][Terminal]]
-  - [[#editor][Editor]]
+- [[#global-configuration][Global configuration]]
+  - [[#basic-zsh-config][Basic ZSH config]]
+  - [[#go][Go]]
   - [[#zsh-completion-directories][ZSH Completion directories]]
-- [[#starship-prompt][Starship prompt]]
-- [[#asdf-vm][ASDF VM]]
+  - [[#oh-my-zsh-plugins][Oh My ZSH plugins]]
+  - [[#path][PATH]]
+  - [[#others][Others]]
+- [[#startup-scripts][Startup scripts]]
+  - [[#oh-my-zsh][Oh My ZSH]]
+  - [[#starship-prompt][Starship prompt]]
+  - [[#asdf-vm][ASDF VM]]
+- [[#plugin-manager][Plugin manager]]
+  - [[#initialization][Initialization]]
+  - [[#plugins][Plugins]]
+  - [[#apply-plugins-and-update][Apply plugins and update]]
 - [[#google-cloud][Google cloud]]
   - [[#initialize][Initialize]]
 - [[#completions][Completions]]
@@ -22,8 +26,6 @@
   - [[#google-cloud-1][Google Cloud]]
   - [[#kubernetes][Kubernetes]]
   - [[#google-cloud-cli][Google Cloud CLI]]
-- [[#langs][Langs]]
-  - [[#golang][Golang]]
 - [[#misc][Misc]]
   - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
   - [[#neofetch][Neofetch]]
@@ -34,105 +36,122 @@
   - [[#ctop][ctop]]
   - [[#tmux][Tmux]]
   - [[#git-kraken][Git kraken]]
-  - [[#reload-zsh][Reload Zsh]]
-  - [[#ssh][SSH]]
   - [[#copy-output-to-clipboard][Copy output to clipboard]]
-  - [[#navigate-to-parent-directories][Navigate to parent directories]]
   - [[#switch-ls-to-use-exa-cli][Switch `ls` to use `exa` cli]]
   - [[#clear-screen][Clear screen]]
   - [[#file-manager][File Manager]]
   - [[#docker][Docker]]
   - [[#emacs][Emacs]]
   - [[#config-git-bare-repository][Config git bare repository]]
-  - [[#git][Git]]
-  - [[#github-cli][Github CLI]]
 - [[#functions][Functions]]
   - [[#emacs-prepare-go][Emacs prepare go]]
-  - [[#create-gitignore-from-gitignoreio][Create Gitignore from gitignore.io]]
-  - [[#start-vpn-connection][Start VPN connection]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
 
-* Load antigen
-#+begin_src sh
-source /home/yuhri/antigen.zsh
-#+end_src
-
-** Oh My ZSH!
-#+BEGIN_SRC shell
-antigen use oh-my-zsh
-#+END_SRC
-
-** ZSH Plugins
-
-#+BEGIN_SRC shell
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zdharma/fast-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
-#+END_SRC
-
-** Apply antigen
+* Global configuration
+** Basic ZSH config
 #+begin_src shell
-antigen apply
+export ZSH='/home/yuhri/.oh-my-zsh'
+export ZSH_DISABLE_COMPFIX="true"
+export DISABLE_UPDATE_PROMPT="true"
+export CASE_SENSITIVE="true"
+export HIST_STAMPS="dd/mm/yyyy"
+export CASE_SENSITIVE="true"
+export HIST_STAMPS="dd/mm/yyyy"
 #+end_src
-
-* Environments
-
-** PATH
-Resources added to ~PATH~:
-
-- Go binaries
-
-#+BEGIN_SRC shell
-export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
-#+END_SRC
-
-** Terminal
-
-#+BEGIN_SRC shell
-export TERM=alacritty
-#+END_SRC
-
-** Editor
-#+BEGIN_SRC shell
-export EDITOR=/usr/bin/emacs
-#+END_SRC
-
+** Go
+#+begin_src shell
+export GOPATH=~/go
+export GOBIN="$GOPATH/bin"
+export GO111MODULE=on
+#+end_src
 ** ZSH Completion directories
 #+begin_src shell
 export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 #+end_src
+** Oh My ZSH plugins
+#+begin_src shell
+plugins=(git)
+#+end_src
 
-* Starship prompt
+** PATH
+*** Elixir binaries
+#+begin_src shell
+export PATH="$PATH:$HOME/.elixir-ls/release"
+#+end_src
+
+*** Go binaries
+#+begin_src shell
+export PATH="$PATH:$GOBIN"
+#+end_src
+
+*** Local binaries
+#+begin_src shell
+export PATH="$PATH:$HOME/.local/bin"
+#+end_src
+
+** Others
+*** Terminal
+#+BEGIN_SRC shell
+export TERM=alacritty
+#+END_SRC
+*** Editor
+#+BEGIN_SRC shell
+export EDITOR=/home/yuhri/.asdf/shims/nvim
+#+END_SRC
+
+
+* Startup scripts
+** Oh My ZSH
+#+begin_src shell
+source $ZSH/oh-my-zsh.sh
+#+end_src
+
+** Starship prompt
 #+begin_src shell
 eval $(starship init zsh)
 #+end_src
 
-* ASDF VM
-#+BEGIN_SRC shell
+** ASDF VM
+#+begin_src shell
 . $HOME/.asdf/asdf.sh
-#+END_SRC
+#+end_src
+
+* Plugin manager
+I use [[https://github.com/zplug/zplug][zplug]] as plugin manager for ZSH
+
+** Initialization
+#+begin_src shell
+source ~/.zplug/init.zsh
+#+end_src
+
+** Plugins
+#+begin_src shell
+zplug "zdharma/fast-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions"
+#+end_src
+
+** Apply plugins and update
+ #+begin_src shell
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+zplug load --verbose
+#+end_src
+
+
 * Google cloud
 ** Initialize
 #+begin_src shell
-
-# The next line updates PATH for the Google Cloud SDK.
 if [ -f '/usr/local/etc/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/path.zsh.inc'; fi
-
 #+end_src
 
 * Completions
-
 ** Local completions files
-*** Docker and Docker-Compose
-#+begin_src shell
-if [ ! -f $ZSH_COMP_DIR/_docker-compose ]; then
-    echo "Fetching docker completions on $ZSH_COMP_DIR"
-    mkdir -p $ZSH_COMP_DIR
-    curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completion/zsh/_docker-compose > $ZSH_COMP_DIR/_docker-compose
-fi
-#+end_src
-
 *** ASDF VM
 #+BEGIN_SRC shell
 if [ -d $ASDF_DIR ]; then
@@ -181,79 +200,6 @@ if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
 fi
 #+END_SRC
 
-* Langs
-** Golang
-
-*** Go flat envs to install packages
-#+begin_src shell
-export GOPATH=~/go
-export GOBIN="$GOPATH/bin"
-export GO111MODULE=on
-export PATH=$GOBIN:$PATH
-#+end_src
-
-*** Go Modules environments
-#+BEGIN_SRC shell
-go_mod() {
-    MAIN_PATH=~/go
-    
-    if [[ ! -f ./.envrc ]]; then
-        echo "dotenv" > .envrc
-    else
-        echo "dotenv" >> .envrc
-    fi
-
-    if [[ -f ./.env ]]; then
-        echo "" >> .env
-    else
-        touch .env
-    fi
-
-    echo "GOPATH=$MAIN_PATH" >> .env
-    echo "GOBIN=$MAIN_PATH/bin" >> .env
-    echo "GO111MODULE=on" >> .env
-
-    echo "PATH_add $MAIN_PATH/bin" >> .envrc
-
-    direnv allow
-    direnv reload
-
-    if [ ! -f ./go.mod ] && [ ! -z "$1" ]; then
-        go mod init $1
-    fi
-}
-#+END_SRC
-
-*** Go dep environments
-#+BEGIN_SRC shell
-go_dep (){
-
-    MAIN_PATH="$(pwd)"
-
-    if [[ ! -f ./.envrc ]]; then
-        echo "dotenv" > .envrc
-    else
-        echo "dotenv" >> .envrc
-    fi
-
-
-    if [[ -f ./.env ]]; then
-        echo "" >> .env
-    else
-        touch .env
-    fi
-    
-    echo "GOPATH=$MAIN_PATH" >> .env
-    echo "GOBIN=$MAIN_PATH/bin" >> .env
-    echo "GO111MODULE=off" >> .env
-
-    echo "PATH_add $MAIN_PATH/bin" >> .envrc
-
-    direnv allow
-    direnv reload
-
-}
-#+END_SRC
 
 * Misc
 ** Fuzzy Finder and Navi
@@ -335,43 +281,7 @@ alias tmp='tm implode'
 
 ** Git kraken
 #+BEGIN_SRC shell
-alias gitkraken='gitkraken > /dev/null &!'
-#+END_SRC
-
-** Reload Zsh
-#+BEGIN_SRC shell
-reload() {
-	local cache="$ZSH_CACHE_DIR"
-	autoload -U compinit zrecompile
-	compinit -i -d "$cache/zcomp-$HOST"
-
-	for f in ${ZDOTDIR:-~}/.zshrc "$cache/zcomp-$HOST"; do
-		zrecompile -p $f && command rm -f $f.zwc.old
-	done
-
-	# Use $SHELL if it's available and a zsh shell
-	local shell="$ZSH_ARGZERO"
-	if [[ "${${SHELL:t}#-}" = zsh ]]; then
-		shell="$SHELL"
-	fi
-
-	# Remove leading dash if login shell and run accordingly
-	if [[ "${shell:0:1}" = "-" ]]; then
-		exec -l "${shell#-}"
-	else
-		exec "$shell"
-	fi
-
-    clear
-}
-#+END_SRC
-
-** SSH
-
-*** New rsa key
-
-#+BEGIN_SRC shell
-alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
+alias gitkraken='gitkraken &!'
 #+END_SRC
 
 ** Copy output to clipboard
@@ -380,21 +290,15 @@ alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
 alias pbcopy='xclip -selection clipboard'
 #+END_SRC
 
-** Navigate to parent directories
-
-#+BEGIN_SRC shell
-alias ..='cd ..'
-alias ...='cd ../..'
-#+END_SRC
-
 ** Switch `ls` to use `exa` cli
 
-#+BEGIN_SRC shell
-alias ls='exa --color=always --group-directories-first' # my preferred listing
-alias la='exa -lah --git --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -lh --git --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-#+END_SRC
+#+begin_src shell
+alias ls='exa -alh --color=always --group-directories-first'
+alias la='exa -lah --color=always --group-directories-first'
+alias l='exa -lh --color=always --group-directories-first'
+alias lt='exa -aT --color=always --group-directories-first'
+alias l.='exa -ah | egrep "^\."'
+#+end_src
 
 ** Clear screen
 
@@ -420,9 +324,10 @@ alias dc='docker-compose'
 ** Emacs
 *** Startup
 #+BEGIN_SRC shell
-export EMACS_BIN=$(which emacs)
-alias emacs='$EMACS_BIN &!'
-#+END_SRC
+emacs (){
+    /usr/local/bin/emacs $@ &!
+}
+ #+END_SRC
 
 ** Config git bare repository
 
@@ -436,7 +341,7 @@ alias cfgc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m'
 alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origin main'
 #+END_SRC
 
-** Git
+** COMMENT Git
 #+BEGIN_SRC shell
 alias g='git'
 alias gsts='git status'
@@ -473,12 +378,6 @@ alias grup='git remote update'
 alias grv='git remote -v'
 #+END_SRC
 
-** Github CLI
-*** Gists
-Fetch gists:
-#+BEGIN_SRC shell
-alias gist='navi --best-match -q "fetch gist"'
-#+END_SRC
 
 * Functions
 
@@ -503,38 +402,6 @@ function emacs_prepare_go {
     go get -u github.com/fatih/gomodifytags
     echo "installing gopls"
     go get golang.org/x/tools/gopls
-}
-#+END_SRC
-
-** Create Gitignore from [[https://gitignore.io/][gitignore.io]]
-#+BEGIN_SRC shell
-function gi {
-    if [ "$1" != "-a" ]; then
-        echo "" > ./.gitignore
-    fi
-    GOPATH=$HOME/go
-    for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
-        gogi -create $template >> .gitignore
-    done
-}
-#+END_SRC
-
-** Start VPN connection
-#+BEGIN_SRC shell
-vpn () {
-    VPN_LOCATION="$HOME/.accesses/paygo"
-
-    if [ $1 = office ] ;then
-
-        sudo openfortivpn -c $VPN_LOCATION/office.conf
-
-    elif [ $1 = kafka ]; then
-        sudo openvpn \
-            --config $VPN_LOCATION/kafka/kafka.ovpn \
-            --cert $VPN_LOCATION/kafka/kafka.crt \
-            --key $VPN_LOCATION/kafka/kafka.key \
-            --auth-retry interact
-    fi
 }
 #+END_SRC
 

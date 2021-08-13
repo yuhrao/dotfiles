@@ -1,7 +1,39 @@
+export ZSH='/home/yuhri/.oh-my-zsh'
+export ZSH_DISABLE_COMPFIX="true"
+export DISABLE_UPDATE_PROMPT="true"
+export CASE_SENSITIVE="true"
+export HIST_STAMPS="dd/mm/yyyy"
+export CASE_SENSITIVE="true"
+export HIST_STAMPS="dd/mm/yyyy"
+
+export GOPATH=~/go
+export GOBIN="$GOPATH/bin"
+export GO111MODULE=on
+
+export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
+
+plugins=(git)
+
+export PATH="$PATH:$HOME/.elixir-ls/release"
+
+export PATH="$PATH:$GOBIN"
+
+export PATH="$PATH:$HOME/.local/bin"
+
+export TERM=alacritty
+
+export EDITOR=/home/yuhri/.asdf/shims/nvim
+
+source $ZSH/oh-my-zsh.sh
+
+eval $(starship init zsh)
+
+. $HOME/.asdf/asdf.sh
+
 source ~/.zplug/init.zsh
 
-zplug "zsh-users/zsh-autosuggestions"
 zplug "zdharma/fast-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
 
 if ! zplug check --verbose; then
@@ -10,35 +42,9 @@ if ! zplug check --verbose; then
         echo; zplug install
     fi
 fi
+zplug load --verbose
 
-zplug load
-
-export PATH="$PATH:$HOME/go/bin:$HOME/.local/bin:$HOME/.elixir-ls/release"
-
-# export TERM=alacritty
-
-export EDITOR=/usr/bin/emacs
-
-export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
-
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-eval $(starship init zsh)
-
-. $HOME/.asdf/asdf.sh
-
-# The next line updates PATH for the Google Cloud SDK.
 if [ -f '/usr/local/etc/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/path.zsh.inc'; fi
-
-if [ ! -f $ZSH_COMP_DIR/_docker-compose ]; then
-    echo "Fetching docker completions on $ZSH_COMP_DIR"
-    mkdir -p $ZSH_COMP_DIR
-    curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completion/zsh/_docker-compose > $ZSH_COMP_DIR/_docker-compose
-fi
 
 if [ -d $ASDF_DIR ]; then
     fpath=($ZSH_COMP_DIR/ ${ASDF_DIR}/completions/ $fpath)
@@ -46,9 +52,9 @@ fi
 
 autoload -Uz compinit && compinit
 
-# if [ $(command -v aws_completer) ]; then
-#     complete -C aws_completer aws
-# fi
+if [ $(command -v aws_completer) ]; then
+    complete -C aws_completer aws
+fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/usr/local/etc/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/completion.zsh.inc'; fi
@@ -66,68 +72,6 @@ fi
 if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
     source /opt/google-cloud-sdk/completion.zsh.inc
 fi
-
-export GOPATH=~/go
-export GOBIN="$GOPATH/bin"
-export GO111MODULE=on
-export PATH=$GOBIN:$PATH
-
-go_mod() {
-    MAIN_PATH=~/go
-    
-    if [[ ! -f ./.envrc ]]; then
-        echo "dotenv" > .envrc
-    else
-        echo "dotenv" >> .envrc
-    fi
-
-    if [[ -f ./.env ]]; then
-        echo "" >> .env
-    else
-        touch .env
-    fi
-
-    echo "GOPATH=$MAIN_PATH" >> .env
-    echo "GOBIN=$MAIN_PATH/bin" >> .env
-    echo "GO111MODULE=on" >> .env
-
-    echo "PATH_add $MAIN_PATH/bin" >> .envrc
-
-    direnv allow
-    direnv reload
-
-    if [ ! -f ./go.mod ] && [ ! -z "$1" ]; then
-        go mod init $1
-    fi
-}
-
-go_dep (){
-
-    MAIN_PATH="$(pwd)"
-
-    if [[ ! -f ./.envrc ]]; then
-        echo "dotenv" > .envrc
-    else
-        echo "dotenv" >> .envrc
-    fi
-
-
-    if [[ -f ./.env ]]; then
-        echo "" >> .env
-    else
-        touch .env
-    fi
-    
-    echo "GOPATH=$MAIN_PATH" >> .env
-    echo "GOBIN=$MAIN_PATH/bin" >> .env
-    echo "GO111MODULE=off" >> .env
-
-    echo "PATH_add $MAIN_PATH/bin" >> .envrc
-
-    direnv allow
-    direnv reload
-
-}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -168,44 +112,15 @@ alias tme='tm edit'
 alias tmn='tm new'
 alias tmp='tm implode'
 
-alias gitkraken='gitkraken > /dev/null &!'
-
-reload() {
-	local cache="$ZSH_CACHE_DIR"
-	autoload -U compinit zrecompile
-	compinit -i -d "$cache/zcomp-$HOST"
-
-	for f in ${ZDOTDIR:-~}/.zshrc "$cache/zcomp-$HOST"; do
-		zrecompile -p $f && command rm -f $f.zwc.old
-	done
-
-	# Use $SHELL if it's available and a zsh shell
-	local shell="$ZSH_ARGZERO"
-	if [[ "${${SHELL:t}#-}" = zsh ]]; then
-		shell="$SHELL"
-	fi
-
-	# Remove leading dash if login shell and run accordingly
-	if [[ "${shell:0:1}" = "-" ]]; then
-		exec -l "${shell#-}"
-	else
-		exec "$shell"
-	fi
-
-    clear
-}
-
-alias new-ssh='ssh-keygen -t rsa -b 4096 -C'
+alias gitkraken='gitkraken &!'
 
 alias pbcopy='xclip -selection clipboard'
 
-alias ..='cd ..'
-alias ...='cd ../..'
-
-alias ls='exa --color=always --group-directories-first' # my preferred listing
-alias la='exa -lah --git --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -lh --git --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias ls='exa -alh --color=always --group-directories-first'
+alias la='exa -lah --color=always --group-directories-first'
+alias l='exa -lh --color=always --group-directories-first'
+alias lt='exa -aT --color=always --group-directories-first'
+alias l.='exa -ah | egrep "^\."'
 
 alias cls='clear'
 
@@ -214,44 +129,15 @@ alias open="xdg-open"
 alias d='docker'
 alias dc='docker-compose'
 
-export EMACS_BIN=$(which emacs)
-alias emacs='$EMACS_BIN &!'
+emacs (){
+    /usr/local/bin/emacs $@ &!
+}
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
 alias cfgs='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME status'
 alias cfgc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m'
 alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origin main'
-
-alias g='git'
-alias gsts='git status'
-alias ga='git add'
-alias gaa='git add --all'
-alias gcl='git clone'
-alias gcmm="git commit -m"
-alias gcm="git commit"
-alias gl='git pull'
-
-alias glg='git log --stat'
-alias glgp='git log --stat -p'
-alias glgg='git log --graph'
-alias glgga='git log --graph --decorate --all'
-alias glgm='git log --graph --max-count=10'
-alias glo='git log --oneline --decorate'
-alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-alias glols="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --stat"
-alias glod="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'"
-alias glods="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short"
-alias glola="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all"
-alias glog='git log --oneline --decorate --graph'
-alias gloga='git log --oneline --decorate --graph --all'
-
-alias gr='git remote'
-alias gra='git remote add'
-alias grup='git remote update'
-alias grv='git remote -v'
-
-alias gist='navi --best-match -q "fetch gist"'
 
 function emacs_prepare_go {
     echo "Installing gore"
@@ -274,53 +160,27 @@ function emacs_prepare_go {
     go get golang.org/x/tools/gopls
 }
 
-function gi {
-    if [ "$1" != "-a" ]; then
-        echo "" > ./.gitignore
-    fi
-    GOPATH=$HOME/go
-    for template in $(gogi -list | sed 's/\,/\n/g' | fzf -m);do
-        gogi -create $template >> .gitignore
-    done
-}
-
-vpn () {
-    VPN_LOCATION="$HOME/.accesses/paygo"
-
-    if [ $1 = office ] ;then
-
-        sudo openfortivpn -c $VPN_LOCATION/office.conf
-
-    elif [ $1 = kafka ]; then
-        sudo openvpn \
-            --config $VPN_LOCATION/kafka/kafka.ovpn \
-            --cert $VPN_LOCATION/kafka/kafka.crt \
-            --key $VPN_LOCATION/kafka/kafka.key \
-            --auth-retry interact
-    fi
-}
-
 SSH_ENV="$HOME/.ssh/agent-environment"
 
-# function start_agent {
-#     echo "Initialising new SSH agent..."
-#     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-#     echo succeeded
-#     chmod 600 "${SSH_ENV}"
-#     . "${SSH_ENV}" > /dev/null
-# }
-# 
+function start_agent {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+}
+
 # Source SSH settings, if applicable
-# 
-# if [ -f "${SSH_ENV}" ]; then
-#     . "${SSH_ENV}" > /dev/null
-#     ps ${SSH_AGENT_PID} doesn't work under cywgin
-#     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-#         start_agent;
-#     }
-# else
-#     start_agent;
-# fi
+
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    #ps ${SSH_AGENT_PID} doesn't work under cywgin
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+    start_agent;
+fi
 
 function sga {
     pkill gpg-agent
