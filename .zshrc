@@ -10,6 +10,12 @@ export GOPATH=~/go
 export GOBIN="$GOPATH/bin"
 export GO111MODULE=on
 
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
 export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 
 plugins=(git)
@@ -130,7 +136,7 @@ alias d='docker'
 alias dc='docker-compose'
 
 emacs (){
-    /usr/local/bin/emacs $@ &!
+    /usr/bin/emacs $@ &!
 }
 
 alias cfg='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
@@ -138,6 +144,15 @@ alias cfga='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME add'
 alias cfgs='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME status'
 alias cfgc='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m'
 alias cfgp='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME push origin main'
+
+_java_home(){
+    if [ -d "$(asdf where java)/jre" ]; then
+        echo "$(asdf where java)/jre"
+    else
+        echo "$(asdf where java)"
+    fi
+}
+alias java_home='export JAVA_HOME="$(_java_home)"'
 
 function emacs_prepare_go {
     echo "Installing gore"

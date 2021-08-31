@@ -6,6 +6,7 @@
 - [[#global-configuration][Global configuration]]
   - [[#basic-zsh-config][Basic ZSH config]]
   - [[#go][Go]]
+  - [[#android][Android]]
   - [[#zsh-completion-directories][ZSH Completion directories]]
   - [[#oh-my-zsh-plugins][Oh My ZSH plugins]]
   - [[#path][PATH]]
@@ -44,6 +45,7 @@
   - [[#emacs][Emacs]]
   - [[#config-git-bare-repository][Config git bare repository]]
 - [[#functions][Functions]]
+  - [[#set-java_home-based-on-asdf-java-version][Set =JAVA_HOME= based on asdf java version]]
   - [[#emacs-prepare-go][Emacs prepare go]]
   - [[#ssh-agent][SSH Agent]]
   - [[#start-gpg-agent][Start GPG agent]]
@@ -59,11 +61,22 @@ export HIST_STAMPS="dd/mm/yyyy"
 export CASE_SENSITIVE="true"
 export HIST_STAMPS="dd/mm/yyyy"
 #+end_src
+
+#+RESULTS:
+
 ** Go
 #+begin_src shell
 export GOPATH=~/go
 export GOBIN="$GOPATH/bin"
 export GO111MODULE=on
+#+end_src
+** Android
+#+begin_src shell
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 #+end_src
 ** ZSH Completion directories
 #+begin_src shell
@@ -325,7 +338,7 @@ alias dc='docker-compose'
 *** Startup
 #+BEGIN_SRC shell
 emacs (){
-    /usr/local/bin/emacs $@ &!
+    /usr/bin/emacs $@ &!
 }
  #+END_SRC
 
@@ -380,6 +393,19 @@ alias grv='git remote -v'
 
 
 * Functions
+
+** Set =JAVA_HOME= based on asdf java version
+
+#+begin_src shell
+_java_home(){
+    if [ -d "$(asdf where java)/jre" ]; then
+        echo "$(asdf where java)/jre"
+    else
+        echo "$(asdf where java)"
+    fi
+}
+alias java_home='export JAVA_HOME="$(_java_home)"'
+#+end_src
 
 ** Emacs prepare go
 #+BEGIN_SRC shell
