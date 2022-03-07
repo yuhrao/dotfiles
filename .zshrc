@@ -20,6 +20,8 @@ export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 
 plugins=(git)
 
+export PATH="$PATH:$HOME/.emacs.d/bin"
+
 export PATH="$PATH:$HOME/.elixir-ls/release"
 
 export PATH="$PATH:$GOBIN"
@@ -97,7 +99,7 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
-alias k=kubectk
+alias k=kubectl
 alias kgpa='kubectl get pods --all-namespaces'
 
 alias ctop='TERM=xterm-256color ctop'

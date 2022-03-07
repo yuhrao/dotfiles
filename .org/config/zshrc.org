@@ -88,6 +88,10 @@ plugins=(git)
 #+end_src
 
 ** PATH
+*** Doom Emacs binary
+#+begin_src shell
+export PATH="$PATH:$HOME/.emacs.d/bin"
+#+end_src
 *** Elixir binaries
 #+begin_src shell
 export PATH="$PATH:$HOME/.elixir-ls/release"
@@ -261,7 +265,7 @@ fi
 
 ** Kubectl
 #+begin_src shell
-alias k=kubectk
+alias k=kubectl
 alias kgpa='kubectl get pods --all-namespaces'
 #+end_src
 
