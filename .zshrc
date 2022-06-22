@@ -1,3 +1,34 @@
+SSH_ENV="$HOME/.ssh/agent-environment"
+
+function start_agent {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    #ps ${SSH_AGENT_PID} doesn't work under cywgin
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+    start_agent;
+fi
+
+function sga {
+    pkill gpg-agent
+    export GPG_TTY="$(tty)"
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpgconf --launch gpg-agent
+}
+
+sga
+
 export ZSH='/home/yuhri/.oh-my-zsh'
 export ZSH_DISABLE_COMPFIX="true"
 export DISABLE_UPDATE_PROMPT="true"
@@ -19,6 +50,11 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export ZSH_COMP_DIR=$(echo '$HOME/.zsh/completions' | envsubst)
 
 plugins=(git)
+
+export MFA_DEVICE='arn:aws:iam::182191116428:mfa/yuhri.bernardes'
+
+export PATH="$PATH:$HOME/.wakatime"
+export WAKATIME_API_KEY=$(cat $HOME/.wakatime_api_key)
 
 export PATH="$PATH:$HOME/.emacs.d/bin"
 
@@ -53,6 +89,13 @@ fi
 zplug load --verbose
 
 if [ -f '/usr/local/etc/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/etc/google-cloud-sdk/path.zsh.inc'; fi
+
+_bb_tasks() {
+    local matches=(`bb tasks |tail -n +3 |cut -f1 -d ' '`)
+    compadd -a matches
+    _files # autocomplete filenames as well
+}
+compdef _bb_tasks bb
 
 if [ -d $ASDF_DIR ]; then
     fpath=($ZSH_COMP_DIR/ ${ASDF_DIR}/completions/ $fpath)
@@ -176,34 +219,3 @@ function emacs_prepare_go {
     echo "installing gopls"
     go get golang.org/x/tools/gopls
 }
-
-SSH_ENV="$HOME/.ssh/agent-environment"
-
-function start_agent {
-    echo "Initialising new SSH agent..."
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    echo succeeded
-    chmod 600 "${SSH_ENV}"
-    . "${SSH_ENV}" > /dev/null
-}
-
-# Source SSH settings, if applicable
-
-if [ -f "${SSH_ENV}" ]; then
-    . "${SSH_ENV}" > /dev/null
-    #ps ${SSH_AGENT_PID} doesn't work under cywgin
-    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-        start_agent;
-    }
-else
-    start_agent;
-fi
-
-function sga {
-    pkill gpg-agent
-    export GPG_TTY="$(tty)"
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --launch gpg-agent
-}
-
-sga

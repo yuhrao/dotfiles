@@ -18,7 +18,7 @@
   ;; External dependencies
  
   ;; :deps {
-  ;;   org.clojure/clojure {:mvn/version "1.10.3"}
+  ;;   org.clojure/clojure {:mvn/version "1.11.1"}
   ;; }
 
   ;; Aliases
@@ -31,7 +31,7 @@
 	;;     :classpath-overrides - map of lib to path that overrides the result of resolving deps
 
   ;; :aliases {
-  ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.12.1019"}}}
+  ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.14.1189"}}}
   ;;   :test {:extra-paths ["test"]}
   ;; }
 
