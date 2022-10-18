@@ -1,6 +1,0 @@
-% gh cli
-
-# fetch gists
-gh gist view <gist-list> > <file-name>
-
-$ gist-list: gh gist list --- --column 1 --delimiter '\t' 
