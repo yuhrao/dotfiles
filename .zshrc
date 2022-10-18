@@ -53,8 +53,10 @@ plugins=(git)
 
 export MFA_DEVICE='arn:aws:iam::182191116428:mfa/yuhri.bernardes'
 
+if [  test -f "${SSH_ENV}" ]; then
 export PATH="$PATH:$HOME/.wakatime"
 export WAKATIME_API_KEY=$(cat $HOME/.wakatime_api_key)
+fi
 
 export PATH="$PATH:$HOME/.emacs.d/bin"
 

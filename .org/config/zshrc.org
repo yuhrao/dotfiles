@@ -136,9 +136,12 @@ export MFA_DEVICE='arn:aws:iam::182191116428:mfa/yuhri.bernardes'
 
 ** Wakatime
 #+begin_src shell
+if [  test -f "${SSH_ENV}" ]; then
 export PATH="$PATH:$HOME/.wakatime"
 export WAKATIME_API_KEY=$(cat $HOME/.wakatime_api_key)
+fi
 #+end_src
+
 
 ** PATH
 *** Doom Emacs binary
