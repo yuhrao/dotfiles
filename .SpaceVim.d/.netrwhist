@@ -1,6 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
-let g:netrw_dirhist_4='/home/yuhri/code/yuhri/bucky/backend'
-let g:netrw_dirhist_3='/home/yuhri/code/yuhri/bucky'
-let g:netrw_dirhist_2='/home/yuhri/code/yuhri/bucky/resources'
-let g:netrw_dirhist_1='/home/yuhri/code/yuhri/bucky'
