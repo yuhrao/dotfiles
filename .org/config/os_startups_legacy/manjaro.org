@@ -1,0 +1,343 @@
+#+TITLE: Manjaro startup from sratch
+
+* System update
+#+BEGIN_SRC shell
+sudo pacman -Sc
+sudo pacman -Sy
+sudo pacman -Syyu
+#+END_SRC
+
+** Yet
+#+BEGIN_SRC shell
+sudo pacman --noconfirm -S yay
+
+yay -Syu --noconfirm
+#+END_SRC
+
+* Problem solutions
+** Problems with cedilla
+#+BEGIN_SRC shell
+yay -S --noconfirm ibus
+#+END_SRC
+
+** Problems with font icons
+#+BEGIN_SRC shell
+yay -S --noconfirm awesome-terminal-fonts cantarell-fonts gsfonts noto-fonts-emoji terminus-font ttf-font-awesome ttf-iosevka ttf-iosevka-git ttf-iosevka-term ttf-iosevka-haskell ttf-iosevka-extended
+#+END_SRC
+
+* ZSH
+#+BEGIN_SRC shell
+yay -S --noconfirm zsh
+#+END_SRC
+
+** Oh My Zsh!
+#+BEGIN_SRC shell
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#+END_SRC
+
+** Powerlevel10k
+#+BEGIN_SRC shell
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+#+END_SRC
+
+** Zinit
+#+BEGIN_SRC shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+#+END_SRC
+
+* SSH Config
+Execute vivaldi initial configuration and login to github.
+#+BEGIN_SRC shell
+yay -S --noconfirm vivaldi
+#+END_SRC
+
+After ssh creation, add it to your GitHub account
+
+** Generate SSH
+#+BEGIN_SRC shell
+ssh-keygen -t rsa -b 4096 -C "your-email"
+eval "$(ssh-agent -s)"
+ssh-add
+#+END_SRC
+
+* Bring me my dotfiles!
+
+We need to remove some files to avoid conflict
+
+#+BEGIN_SRC shell
+rm -rf $HOME/.zshrc $HOME/.gitconfig $HOME/.bashrc
+export DOTFILES_GIT_DIR=$HOME/.dotfiles
+export DOTFILES_DEPO_URL='git@github.com:YuhriBernardes/dotfiles.git'
+git clone --bare $DOTFILES_DEPO_URL $DOTFILES_GIT_DIR
+alias cfg='/usr/bin/git --git-dir=$DOTFILES_GIT_DIR --work-tree=$HOME'
+cfg config --local status.showUntrackedFiles no
+cfg checkout
+#+END_SRC
+
+* Neovim
+#+BEGIN_SRC shell
+yay -S --noconfirm neovim
+#+END_SRC
+
+* Emacs (Doom)
+#+BEGIN_SRC shell
+yay  -S --noconfirm emacs27-git
+#+END_SRC
+
+** Doom emacs
+Before start doom emacs installation, bring you Doom emacs configuration if you have some
+
+#+BEGIN_SRC shell
+export DOOM_EMACS_REPO_URL='git@github.com:YuhriBernardes/doom-emacs-config.git'
+git clone $DOOM_EMACS_REPO_URL $HOME/.doom.d
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
+~/.emacs.d/bin/doom sync
+#+END_SRC
+
+* Terminal emulator
+#+BEGIN_SRC shell
+yay  -S --noconfirm alacritty
+#+END_SRC
+
+* Misc
+Some facilities for terminal operation
+
+=exa=: Substitute for =ls= command
+=xclip=: Copy stdout to clipboard
+=bat=: Better file visualization (used like =cat= command)
+=bluez-utils=: Bluetooth manager
+
+#+BEGIN_SRC shell
+yay -S --noconfirm exa httpie xclip bat bluez-utils
+#+END_SRC
+
+* Docker
+** Engine
+We need to add our user to docker group, otherwise we will need to use `sudo docker` and not `docker`
+This operation needs system reboot or logoff
+
+#+BEGIN_SRC shell
+yay -S --noconfirm docker
+sudo usermod -aG docker $(whoami)
+#+END_SRC
+
+** Start docker daemon
+#+BEGIN_SRC shell
+sudo systemctl start docker
+#+END_SRC
+** Initialize docker daemon on system startup
+#+BEGIN_SRC shell
+sudo systemctl enable docker
+#+END_SRC
+
+** Compose
+#+BEGIN_SRC shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+#+END_SRC
+
+* Access
+** VPN
+#+BEGIN_SRC shell
+mkdir -p $HOME/.vpn
+#+END_SRC
+
+** AWS
+#+BEGIN_SRC shell
+yay -S --noconfirm aws-cli
+mkdir -p $HOME/.aws
+#+END_SRC
+
+* ASDF VM
+** Engine
+#+BEGIN_SRC shell
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0-rc1
+. $HOME/.asdf/asdf.sh
+asdf update
+#+END_SRC
+
+** Java
+=jq= is required for use asdf java plugin
+#+BEGIN_SRC shell
+yay -S --noconfirm jq
+#+END_SRC
+
+Install =openjdk=
+We need to remove the existent java in the system, otherwise we can't refer to our asdf java in the terminal
+
+#+BEGIN_SRC shell
+sudo rm -rf /bin/java
+asdf plugin-add java https://github.com/halcyon/asdf-java.git
+export JAVA_VERSION='adoptopenjdk-8.0.265+1.openj9-0.21.0'
+asdf install java $JAVA_VERSION && asdf global java $JAVA_VERSION
+unset JAVA_VERSION
+#+END_SRC
+
+** Rlwrap
+
+** Clojure
+*** Rlwrap
+Needed to use =clj= command in the terminal
+
+#+BEGIN_SRC shell
+yay -S --noconfirm rlwrap
+#+END_SRC
+
+*** Clojure core (tools deps)
+#+BEGIN_SRC shell
+asdf plugin-add clojure https://github.com/halcyon/asdf-clojure.git
+export CLJ_VERSION=$(asdf list-all clojure | tail -n1)
+asdf install clojure $CLJ_VERSION && asdf global clojure $CLJ_VERSION
+unset CLJ_VERSION
+#+END_SRC
+
+*** Leiningen
+#+BEGIN_SRC shell
+asdf plugin-add lein https://github.com/miorimmax/asdf-lein.git
+export LEIN_VERSION=$(asdf list-all lein | tail -n1)
+asdf install lein $LEIN_VERSION && asdf global lein $LEIN_VERSION
+unset LEIN_VERSION
+#+END_SRC
+
+#+RESULTS:
+
+** Kubectl
+Kuberenetes CLI
+#+BEGIN_SRC shell
+asdf plugin-add kubectl https://github.com/Banno/asdf-kubectl.git
+export KUBE_VERSION=$(asdf list-all kubectl | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1) && echo Kuber version $KUBE_VERSION
+asdf install kubectl $KUBE_VERSION && asdf global kubectl $KUBE_VERSION
+unset KUBE_VERSION
+#+END_SRC
+
+** NodeJS
+
+#+BEGIN_SRC shell
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+export NODE_VERSION=$(asdf list-all nodejs | tail -n1)
+asdf install nodejs $NODE_VERSION && asdf global nodejs $NODE_VERSION
+unset NODE_VERSION
+#+END_SRC
+
+** Golang
+#+BEGIN_SRC shell
+asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
+export GO_VERSION=$(asdf list-all golang | grep -e "^[0-9]*.[0-9]*.[0-9]*$" | tail -n1) && echo Installing Golang version: $GO_VERSION
+asdf install golang $GO_VERSION && asdf global golang $GO_VERSION
+unset GO_VERSION
+#+END_SRC
+
+*** Packages to work with emacs
+#+BEGIN_SRC shell
+go get -u github.com/motemen/gore/cmd/gore
+go get -u github.com/stamblerre/gocode
+go get -u golang.org/x/tools/cmd/godoc
+go get -u golang.org/x/tools/cmd/goimports
+go get -u golang.org/x/tools/cmd/gorename
+go get -u golang.org/x/tools/cmd/guru
+go get -u github.com/cweill/gotests/...
+go get -u github.com/fatih/gomodifytags
+go get golang.org/x/tools/gopls@latest
+#+END_SRC
+
+
+* Babashka & jet
+#+BEGIN_SRC shell
+curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install | sudo sh
+
+curl -s https://raw.githubusercontent.com/borkdude/jet/master/install > /tmp/install_jet
+sudo chmod +x /tmp/install_jet
+sudo /tmp/install_jet
+rm -f /tmp/install_jet
+#+END_SRC
+
+* Terminal utilities
+
+** Fuzzy Finder
+#+BEGIN_SRC shell
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+#+END_SRC
+
+** Navi
+#+BEGIN_SRC shell
+yay -S --noconfirm navi
+#+END_SRC
+
+** Better Man Pages
+#+BEGIN_SRC shell
+yay -S --noconfirm macho
+#+END_SRC
+
+** Direnv
+#+BEGIN_SRC shell
+yay -S --noconfirm direnv
+#+END_SRC
+
+** Dotenv
+#+BEGIN_SRC shell
+npm install -g dotenv-cli
+#+END_SRC
+
+** Better Finder =fd=
+#+BEGIN_SRC shell
+yay -S --noconfirm fd
+#+END_SRC
+
+** Screenshot
+#+BEGIN_SRC shell
+yay -S noconfirm maim
+#+END_SRC
+
+
+* ULaucher
+#+BEGIN_SRC shell
+cd $HOME
+git clone https://aur.archlinux.org/ulauncher.git && cd ulauncher && makepkg -is
+cd $HOME
+rm -rf ulauncher
+#+END_SRC
+
+* GitHub CLI
+#+BEGIN_SRC shell
+yay -S --noconfirm github-cli
+#+END_SRC
+
+* Kafkac
+#+BEGIN_SRC shell
+yay -S --noconfirm kafkacat
+#+END_SRC
+
+* Franz
+
+#+BEGIN_SRC shell
+yay -S --noconfirm franz-bin
+#+END_SRC
+
+* Openfortivpn
+
+#+BEGIN_SRC shell
+yay -S --noconfirm openfortivpn
+#+END_SRC
+
+* Misc
+** Colorscript
+#+BEGIN_SRC shell
+yay -S --noconfirm shell-color-scripts
+#+END_SRC
+** Others
+
+#+BEGIN_SRC shell
+yay -S --noconfirm tree lolcat cowsay fortune-mod
+#+END_SRC
+
+* Insomnia
+#+BEGIN_SRC shell
+yay -S --noconfirm insomnia insomnia-designer
+#+END_SRC
+
+* Discord
+#+BEGIN_SRC shell
+sudo snap install discord
+#+END_SRC
