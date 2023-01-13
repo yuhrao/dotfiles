@@ -38,6 +38,12 @@ sudo ln -s /var/lib/snapd/snap /snap
 
 ** Basic Stuff
 
+*** Fix some installation problems
+
+#+begin_src shell
+yay -S --noconfirm --needed base-devel
+#+end_src
+
 *** Characters and Emojis problem
 
 #+begin_src shell

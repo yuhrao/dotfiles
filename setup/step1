@@ -11,6 +11,8 @@ yay -S --noconfirm jq snapd
 sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
 
+yay -S --noconfirm --needed base-devel
+
 yay -S --noconfirm ibus awesome-terminal-fonts cantarell-fonts gsfonts noto-fonts-emoji terminus-font ttf-font-awesome ttf-iosevka ttf-iosevka-git ttf-iosevka-term ttf-iosevka-haskell ttf-iosevka-extended
 
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2

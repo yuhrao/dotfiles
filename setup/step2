@@ -5,8 +5,6 @@ function asdf_latest() {
     asdf global $1 latest
 }
 
-
-
 echo "Installing golang latest version"
 asdf_latest golang
 
@@ -84,15 +82,35 @@ yay -S --noconfirm insomnia-bin
 
 yay -S --noconfirm httpie
 
+yay -S --noconfirm docker
+
+sudo systemctl enable --now docker.service
+sudo systemctl enable --now containerd.service
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+echo "Installing docker compose"
+
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
 yay -S --noconfirm flameshot
 
 yay -S --noconfirm ulauncher-git
 systemctl --user enable --now ulauncher.service
 
-yay -S xclip
+yay -S --noconfirm xclip
 
-
+yay -S flatpak
+flatpak install -y flathub com.obsproject.Studio
 
 yay -S --noconfirm scrcpy
 
+yay -S --noconfirm mesa xorg-server-devel
 
+GO111MODULE=off go get github.com/unix-streamdeck/streamdeckd
+GO111MODULE=off go get github.com/unix-streamdeck/streamdeckui

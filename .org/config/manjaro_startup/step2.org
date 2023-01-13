@@ -14,10 +14,6 @@ function asdf_latest() {
 }
 #+end_src
 
-** Base Packages
-#+begin_src shell
-#+end_src
-
 * Programming Languages
 ** Golang
 #+begin_src shell
@@ -75,19 +71,26 @@ asdf_latest dart
 #+end_src
 
 ** Flutter
+
 #+begin_src shell
 echo "Installing Flutter"
 asdf_latest flutter
 #+end_src
 
 * CLIs and Terminal Tools
+
 ** FZF
+
 #+begin_src shell
 yay -S --noconfirm fzf
 #+end_src
 
+#+RESULTS:
+
 ** Exa
+
 [[https://github.com/ogham/exa][exa]]: A modern replacement for ‘ls’.
+
 #+begin_src shell
 yay -S --noconfirm exa
 #+end_src
@@ -107,8 +110,12 @@ clear
 #+end_src
 
 ** AWS CLI
+
+[[https://github.com/broamski/aws-mfa][AWS MFA Repo]]
+
 #+begin_src shell
 yay -S --noconfirm aws-cli-v2-bin
+
 #+end_src
 
 ** GKSu
@@ -160,6 +167,27 @@ yay -S --noconfirm alacritty
 yay -S --noconfirm httpie
 #+end_src
 
+** Docker
+#+begin_src shell
+yay -S --noconfirm docker
+
+sudo systemctl enable --now docker.service
+sudo systemctl enable --now containerd.service
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+#+end_src
+** Docker Compose
+#+begin_src shell
+echo "Installing docker compose"
+
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+#+end_src
+
 * Others
 ** Flameshot
 #+begin_src shell
@@ -174,17 +202,22 @@ systemctl --user enable --now ulauncher.service
 
 ** Clipboard from terminal
 #+begin_src shell
-yay -S xclip
+yay -S --noconfirm xclip
 #+end_src
 
 ** OBS Studio
+TODO: Instal with browser source support
+
 #+begin_src shell
+yay -S flatpak
+flatpak install -y flathub com.obsproject.Studio
+
+
 #+end_src
 
 ** Share tablet screen on linux
 
 [[https://github.com/Genymobile/scrcpy][repo]]
-
 #+begin_src shell
 yay -S --noconfirm scrcpy
 #+end_src
@@ -195,4 +228,8 @@ yay -S --noconfirm scrcpy
 You should add `$GOBIN/streamdeckd` to your application session startup
 
 #+begin_src shell
+yay -S --noconfirm mesa xorg-server-devel
+
+GO111MODULE=off go get github.com/unix-streamdeck/streamdeckd
+GO111MODULE=off go get github.com/unix-streamdeck/streamdeckui
 #+end_src
