@@ -282,7 +282,6 @@ if [ -f /opt/google-cloud-sdk/completion.zsh.inc ]; then
 fi
 #+END_SRC
 
-
 * Misc
 ** Fuzzy Finder and Navi
 fzf: [[https://github.com/junegunn/fzf#installation][install]] | [[https://github.com/junegunn/fzf#usage][usage]]

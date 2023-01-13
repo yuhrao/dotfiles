@@ -1,0 +1,62 @@
+#!/bin/bash
+echo "Installing new Package Manager"
+sudo pacman --noconfirm -S yay
+clear
+echo "Updating package repositories"
+yay -Syuu --noconfirm
+clear
+
+echo "Installing snap"
+yay -S --noconfirm jq snapd
+sudo systemctl enable --now snapd.socket
+sudo ln -s /var/lib/snapd/snap /snap
+
+yay -S --noconfirm ibus awesome-terminal-fonts cantarell-fonts gsfonts noto-fonts-emoji terminus-font ttf-font-awesome ttf-iosevka ttf-iosevka-git ttf-iosevka-term ttf-iosevka-haskell ttf-iosevka-extended
+
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+. $HOME/.asdf/asdf.sh
+asdf update
+
+# ZSH shell
+echo "Installing ZSH"
+yay -S --noconfirm zsh
+clear
+
+# Oh My ZSH
+echo "Installing Oh My ZSH"
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+clear
+
+#Zplug
+echo "Installing Zplug"
+curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+clear
+
+#Starship Prompt
+echo "Installing Starship Prompt"
+yay -S --noconfirm starship
+
+echo "Preparing to get dotfiles"
+echo "Removing current files"
+rm -rf $HOME/.zshrc $HOME/.gitconfig $HOME/.bashrc
+echo "Creatinge envs"
+export DOTFILES_GIT_DIR=$HOME/.dotfiles
+export DOTFILES_DEPO_URL='https://github.com/yuhribernardes/dotfiles.git'
+echo "Creating helper alias"
+echo "Cloning dotfiles"
+git clone --bare $DOTFILES_DEPO_URL $DOTFILES_GIT_DIR
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout
+
+echo "Installing base packages for Yubikey"
+yay -S --noconfirm gnupg pcsclite ccid hopenpgp-tools yubikey-personalization
+clear
+
+echo "Configuring yubikey"
+export KEY_ID='A1B88F04491C00D6B837CBB2B07787AC8C82B9B2'
+gpg --import $HOME/.gnupg/yubikey.gpg
+
+echo -e "5\ny\n" |  gpg --command-fd 0 --expert --edit-key $KEY_ID trust
+clear
+
+echo "Restart the computer and execute step 2 script"

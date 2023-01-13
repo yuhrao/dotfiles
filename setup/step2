@@ -1,51 +1,28 @@
-#+TITLE: Manjaro startup from sratch
-#+AUTHOR: Yuhri Graziano Bernardes
-#+PROPERTY: header-args :tangle ~/setup/step2
-
-* ASDF Dependencies
-** Utilities
-- Makes easier to install latest versions of asdf plugins
-#+begin_src shell
 #!/bin/bash
 function asdf_latest() {
     asdf plugin add $1
     asdf install $1 latest
     asdf global $1 latest
 }
-#+end_src
 
-** Base Packages
-#+begin_src shell
-#+end_src
 
-* Programming Languages
-** Golang
-#+begin_src shell
+
 echo "Installing golang latest version"
 asdf_latest golang
-#+end_src
 
-** JAVA
-#+begin_src shell
 echo "Installing JAVA"
 asdf plugin add java
 asdf install java openjdk-11.0.2
 asdf install java openjdk-19.0.1
 asdf global java openjdk-11.0.2
-#+end_src
 
-** NodeJS
-#+begin_src shell
 echo "Installing NodeJS"
 asdf plugin add nodejs
 asdf install nodejs lts
 asdf global nodejs lts
 
 asdf_latest yarn
-#+end_src
 
-** clojure
-#+begin_src shell
 echo "Installing Clojure"
 asdf plugin add clj https://github.com/yuhribernardes/asdf-clojure.git
 asdf install clj latest
@@ -60,67 +37,32 @@ asdf_latest babashka
 
 echo "Installing CLJ Kondo"
 yay -S --noconfirm clj-kondo-bin
-#+end_src
 
-** Rust
-#+begin_src shell
 echo "Installing Rust"
 asdf_latest rust
-#+end_src
 
-** Dart
-#+begin_src shell
 echo "Installing Dart"
 asdf_latest dart
-#+end_src
 
-** Flutter
-#+begin_src shell
 echo "Installing Flutter"
 asdf_latest flutter
-#+end_src
 
-* CLIs and Terminal Tools
-** FZF
-#+begin_src shell
 yay -S --noconfirm fzf
-#+end_src
 
-** Exa
-[[https://github.com/ogham/exa][exa]]: A modern replacement for ‘ls’.
-#+begin_src shell
 yay -S --noconfirm exa
-#+end_src
 
-** Tmux
-#+begin_src shell
 yay -S --noconfirm tmux
-#+end_src
 
-** Kubernetes
-#+begin_src shell
 echo "Installing Kubernetes stuff"
 asdf_latest kubectl
 asdf_latest kubectx
 asdf_latest k3d
 clear
-#+end_src
 
-** AWS CLI
-#+begin_src shell
 yay -S --noconfirm aws-cli-v2-bin
-#+end_src
 
-** GKSu
-Utility to prompt sudo password to execute sudo background tasks
-#+begin_src shell
 yay -S --noconfirm gksu
-#+end_src
 
-
-* IDEs
-** Emacs
-#+begin_src shell
 echo "Installing Emacs"
 yay -S --noconfirm emacs
 
@@ -129,10 +71,7 @@ git clone git@github.com:yuhribernardes/doom-emacs-config.git $HOME/.doom.d
 rm -rf $HOME/.emacs.d
 git clone --depth 1 https://github.com/doomemacs/doomemacs $HOME/.emacs.d
 $HOME/.emacs.d/bin/doom install
-#+end_src
 
-** Jetbrains
-#+begin_src shell
 echo "Installing Jetbrains IDEs"
 sudo snap install intellij-idea-ultimate --classic
 sudo snap install clion --classic
@@ -140,59 +79,20 @@ sudo snap install datagrip --classic
 sudo snap install goland --classic
 sudo snap install webstorm --classic
 clear
-#+end_src
 
-
-* Developer Tools
-** Insomnia
-#+begin_src shell
 yay -S --noconfirm insomnia-bin
-#+end_src
 
-** Alacritty
-
-#+begin_src
-yay -S --noconfirm alacritty
-#+end_src
-
-** Httpie
-#+begin_src shell
 yay -S --noconfirm httpie
-#+end_src
 
-* Others
-** Flameshot
-#+begin_src shell
 yay -S --noconfirm flameshot
-#+end_src
 
-** Ulauncher
-#+begin_src shell
 yay -S --noconfirm ulauncher-git
 systemctl --user enable --now ulauncher.service
-#+end_src
 
-** Clipboard from terminal
-#+begin_src shell
 yay -S xclip
-#+end_src
 
-** OBS Studio
-#+begin_src shell
-#+end_src
 
-** Share tablet screen on linux
 
-[[https://github.com/Genymobile/scrcpy][repo]]
-
-#+begin_src shell
 yay -S --noconfirm scrcpy
-#+end_src
 
-** Stream Deck
 
-[[https://github.com/unix-streamdeck/streamdeckui][repo]]
-You should add `$GOBIN/streamdeckd` to your application session startup
-
-#+begin_src shell
-#+end_src
