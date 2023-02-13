@@ -1,6 +1,46 @@
-#+TITLE: Manjaro startup from sratch
+#+TITLE: Manjaro startup from sratch - Step 2
 #+AUTHOR: Yuhri Graziano Bernardes
 #+PROPERTY: header-args :tangle ~/setup/step2
+
+* Table of Contents :toc:
+- [[#asdf-dependencies][ASDF Dependencies]]
+  - [[#utilities][Utilities]]
+- [[#programming-languages][Programming Languages]]
+  - [[#golang][Golang]]
+  - [[#java][JAVA]]
+  - [[#nodejs][NodeJS]]
+  - [[#clojure][clojure]]
+  - [[#rust][Rust]]
+  - [[#dart][Dart]]
+  - [[#flutter][Flutter]]
+- [[#clis-and-terminal-tools][CLIs and Terminal Tools]]
+  - [[#fzf][FZF]]
+  - [[#exa][Exa]]
+  - [[#tmux][Tmux]]
+  - [[#kubernetes][Kubernetes]]
+  - [[#aws-cli][AWS CLI]]
+  - [[#gksu][GKSu]]
+- [[#ides][IDEs]]
+  - [[#emacs][Emacs]]
+  - [[#jetbrains][Jetbrains]]
+- [[#developer-tools][Developer Tools]]
+  - [[#insomnia][Insomnia]]
+  - [[#alacritty][Alacritty]]
+  - [[#httpie][Httpie]]
+  - [[#docker][Docker]]
+  - [[#docker-compose][Docker Compose]]
+- [[#others][Others]]
+  - [[#flameshot][Flameshot]]
+  - [[#ulauncher][Ulauncher]]
+  - [[#clipboard-from-terminal][Clipboard from terminal]]
+  - [[#obs-studio][OBS Studio]]
+  - [[#share-tablet-screen-on-linux][Share tablet screen on linux]]
+  - [[#stream-deck][Stream Deck]]
+  - [[#browsers][Browsers]]
+  - [[#discord][Discord]]
+  - [[#razer-stuff][Razer Stuff]]
+- [[#auto-start-apps][Auto Start Apps]]
+  - [[#auto-start-files][Auto Start Files]]
 
 * ASDF Dependencies
 ** Utilities
@@ -19,6 +59,7 @@ function asdf_latest() {
 #+begin_src shell
 echo "Installing golang latest version"
 asdf_latest golang
+asdf install golang 1.16.15
 #+end_src
 
 ** JAVA
@@ -220,8 +261,36 @@ yay -S --noconfirm scrcpy
 ** Stream Deck
 
 [[https://github.com/unix-streamdeck/streamdeckui][repo]]
-You should add `$GOBIN/streamdeckd` to your application session startup
+#+begin_src shell
+yay -S --noconfirm mesa xorg-server-devel
+asdf global golang 1.16.15
+go get github.com/unix-streamdeck/streamdeckd
+go get github.com/unix-streamdeck/streamdeckui
+asdf global golang latest
+#+end_src
+
+** Browsers
 
 #+begin_src shell
-yay -S --noconfirm streamdeck-ui
+yay -S --noconfirm vivaldi brave-browser google-chrome firefox
+#+end_src
+
+** Discord
+#+begin_src shell
+sudo snap install discord
+#+end_src
+
+** Razer Stuff
+Polychromatic Site: [[https://polychromatic.app][link]]
+
+#+begin_src shell
+yay -S --noconfirm polychromatic openrazer-meta
+sudo gpasswd -a $USER plugdev
+systemctl --user enable openrazer-daemon.service
+#+end_src
+
+* Auto Start Apps
+** Auto Start Files
+#+begin_src shell
+cp /home/yuhri/.org/config/manjaro_startup/autostart/* /home/yuhri/.config/autostart
 #+end_src

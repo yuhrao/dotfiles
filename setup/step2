@@ -7,6 +7,7 @@ function asdf_latest() {
 
 echo "Installing golang latest version"
 asdf_latest golang
+asdf install golang 1.16.15
 
 echo "Installing JAVA"
 asdf plugin add java
@@ -108,4 +109,18 @@ flatpak install -y flathub com.obsproject.Studio
 
 yay -S --noconfirm scrcpy
 
-yay -S --noconfirm streamdeck-ui
+yay -S --noconfirm mesa xorg-server-devel
+asdf global golang 1.16.15
+go get github.com/unix-streamdeck/streamdeckd
+go get github.com/unix-streamdeck/streamdeckui
+asdf global golang latest
+
+yay -S --noconfirm vivaldi brave-browser google-chrome firefox
+
+sudo snap install discord
+
+yay -S --noconfirm polychromatic openrazer-meta
+sudo gpasswd -a $USER plugdev
+systemctl --user enable openrazer-daemon.service
+
+cp /home/yuhri/.org/config/manjaro_startup/autostart/* /home/yuhri/.config/autostart

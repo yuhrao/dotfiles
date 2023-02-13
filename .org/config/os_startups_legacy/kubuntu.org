@@ -1,2 +1,0 @@
-#+TITLE: Kubuntu
-#+AUTHOR: Yuhri Graziano Bernardes

@@ -1,4 +1,4 @@
-#+TITLE: Manjaro startup from sratch
+#+TITLE: Manjaro startup from sratch - Step 1
 #+AUTHOR: Yuhri Graziano Bernardes
 #+PROPERTY: header-args :tangle ~/setup/step1
 
