@@ -90,8 +90,6 @@ sudo systemctl enable --now containerd.service
 sudo groupadd docker
 sudo usermod -aG docker $USER
 
-echo "Installing docker compose"
-
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
 curl -SL https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
@@ -105,12 +103,9 @@ systemctl --user enable --now ulauncher.service
 
 yay -S --noconfirm xclip
 
-yay -S flatpak
+yay -S --noconfirm flatpak
 flatpak install -y flathub com.obsproject.Studio
 
 yay -S --noconfirm scrcpy
 
-yay -S --noconfirm mesa xorg-server-devel
-
-GO111MODULE=off go get github.com/unix-streamdeck/streamdeckd
-GO111MODULE=off go get github.com/unix-streamdeck/streamdeckui
+yay -S --noconfirm streamdeck-ui
