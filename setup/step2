@@ -48,6 +48,8 @@ asdf_latest flutter
 
 yay -S --noconfirm fzf
 
+yay -S --noconfirm fd
+
 yay -S --noconfirm exa
 
 yay -S --noconfirm tmux
@@ -123,4 +125,15 @@ yay -S --noconfirm polychromatic openrazer-meta
 sudo gpasswd -a $USER plugdev
 systemctl --user enable openrazer-daemon.service
 
-cp /home/yuhri/.org/config/manjaro_startup/autostart/* /home/yuhri/.config/autostart
+create_autostart(){
+    local FILE=$HOME/.org/config/manjaro_startup/autostart/$1
+    local AUTOSTART_PATH=$HOME/.config/autostart/$(basename $FILE)
+    local EXEC_NAME=$2
+    cat $FILE | EXEC_PATH=$(where $EXEC_NAME | tail -1 | tr --delete '\n') envsubst > $AUTOSTART_PATH
+}
+
+mkdir -p $HOME/.config/autostart # ensures that path exists
+create_autostart ulauncher.desktop ulauncher
+create_autostart Streamdeckd.desktop streamdeckd
+create_autostart polychromatic-autostart.desktop polychromatic-helper
+create_autostart Flameshot.desktop flameshot
