@@ -15,7 +15,7 @@ window:
   #
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
-  opacity: 0.9
+  opacity: 1.0
 
   # Window dimensions (changes require restart)
   #
@@ -165,58 +165,62 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 #draw_bold_text_with_bright_colors: false
 
-# Colors (Tomorrow Night)
+# Dracula Pro - Van Helsing
+# https://draculatheme.com/pro
+
 colors:
   primary:
-    background: '0x0b0d0f'
-    foreground: '0xf8f8f2'
-
-    # Bright and dim foreground colors
-    #
-    # The dimmed foreground color is calculated automatically if it is not present.
-    # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
-    # is `false`, the normal foreground color will be used.
-    #dim_foreground: '0x9a9a9a'
-    #bright_foreground: '0xffffff'
-
-  # Cursor colors
-  #
-  # Colors which should be used to draw the terminal cursor. If these are unset,
-  # the cursor color will be the inverse of the cell color.
+    background: "#0B0D0F"
+    foreground: "#F8F8F2"
+    bright_foreground: "#FFFFFF"
   cursor:
-    text: '0x414d58'
-    cursor: '0xf8f8f2'
-
-  # Selection colors
-  #
-  # Colors which should be used to draw the selection area. If selection
-  # background is unset, selection color will be the inverse of the cell colors.
-  # If only text is unset the cell text color will remain the same.
+    text: CellBackground
+    cursor: CellForeground
+  vi_mode_cursor:
+    text: CellBackground
+    cursor: CellForeground
+  search:
+    matches:
+      foreground: "#414D58"
+      background: "#8AFF80"
+    focused_match:
+      foreground: "#414D58"
+      background: "#FFCA80"
+  footer_bar:
+    background: "#0B0D0F"
+    foreground: "#F8F8F2"
+  hints:
+    start:
+      foreground: "#0B0D0F"
+      background: "#FFFF80"
+    end:
+      foreground: "#FFFF80"
+      background: "#0B0D0F"
+  line_indicator:
+    foreground: None
+    background: None
   selection:
-    text: '0xf8f8f2'
-    background: '0x414d58'
-
-  # Normal colors
+    text: CellForeground
+    background: "#414D58"
   normal:
-    black:   '0x0b0d0f'
-    red:     '0xff9580'
-    green:   '0x8aff80'
-    yellow:  '0xffff80'
-    blue:    '0x9580ff'
-    magenta: '0xff80bf'
-    cyan:    '0x80ffea'
-    white:   '0xf8f8f2'
-
-  # Bright colors
+    black: "#708CA9"
+    red: "#FF9580"
+    green: "#8AFF80"
+    yellow: "#FFFF80"
+    blue: "#9580FF"
+    magenta: "#FF80BF"
+    cyan: "#80FFEA"
+    white: "#F8F8F2"
   bright:
-    black:   '0x0b0d0f'
-    red:     '0xffaa99'
-    green:   '0xa2ff99'
-    yellow:  '0xffff99'
-    blue:    '0xaa99ff'
-    magenta: '0xff99cc'
-    cyan:    '0x99ffee'
-    white:   '0xffffff'
+    black: "#708CA9"
+    red: "#FFAA99"
+    green: "#A2FF99"
+    yellow: "#FFFF99"
+    blue: "#AA99FF"
+    magenta: "#FF99CC"
+    cyan: "#99FFEE"
+    white: "#FFFFFF"
+
 
   # Dim colors
   #
