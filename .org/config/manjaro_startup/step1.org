@@ -22,10 +22,8 @@
 #!/bin/bash
 echo "Installing new Package Manager"
 sudo pacman --noconfirm -S yay
-clear
 echo "Updating package repositories"
 yay -Syuu --noconfirm
-clear
 #+END_SRC
 
 ** Snap package manager
@@ -68,17 +66,14 @@ asdf update
 # ZSH shell
 echo "Installing ZSH"
 yay -S --noconfirm zsh
-clear
 
 # Oh My ZSH
 echo "Installing Oh My ZSH"
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-clear
 
 #Zplug
 echo "Installing Zplug"
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-clear
 
 #Starship Prompt
 echo "Installing Starship Prompt"
@@ -109,7 +104,6 @@ git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout
 #+begin_src shell
 echo "Installing base packages for Yubikey"
 yay -S --noconfirm gnupg pcsclite ccid hopenpgp-tools yubikey-personalization
-clear
 #+end_src
 
 *** Trust Key
@@ -119,7 +113,6 @@ export KEY_ID='A1B88F04491C00D6B837CBB2B07787AC8C82B9B2'
 gpg --import $HOME/.gnupg/yubikey.gpg
 
 echo -e "5\ny\n" |  gpg --command-fd 0 --expert --edit-key $KEY_ID trust
-clear
 #+end_src
 * Final
 #+begin_src shell
