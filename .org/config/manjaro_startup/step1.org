@@ -20,6 +20,8 @@
 
 #+BEGIN_SRC shell
 #!/bin/bash
+echo "Pré init"
+sudo pacman -Syuu --noconfirm
 echo "Installing new Package Manager"
 sudo pacman --noconfirm -S yay
 echo "Updating package repositories"
