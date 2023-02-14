@@ -60,7 +60,6 @@ echo "Installing Kubernetes stuff"
 asdf_latest kubectl
 asdf_latest kubectx
 asdf_latest k3d
-clear
 
 yay -S --noconfirm aws-cli-v2-bin
 
@@ -81,7 +80,6 @@ sudo snap install clion --classic
 sudo snap install datagrip --classic
 sudo snap install goland --classic
 sudo snap install webstorm --classic
-clear
 
 yay -S --noconfirm insomnia-bin
 

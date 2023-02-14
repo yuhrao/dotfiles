@@ -159,7 +159,6 @@ echo "Installing Kubernetes stuff"
 asdf_latest kubectl
 asdf_latest kubectx
 asdf_latest k3d
-clear
 #+end_src
 
 ** AWS CLI
@@ -199,7 +198,6 @@ sudo snap install clion --classic
 sudo snap install datagrip --classic
 sudo snap install goland --classic
 sudo snap install webstorm --classic
-clear
 #+end_src
 
 
