@@ -128,8 +128,8 @@ systemctl --user enable openrazer-daemon.service
 create_autostart(){
     local FILE=$HOME/.org/config/manjaro_startup/autostart/$1
     local AUTOSTART_PATH=$HOME/.config/autostart/$(basename $FILE)
-    local EXEC_NAME=$2
-    cat $FILE | EXEC_PATH=$(where $EXEC_NAME | tail -1 | tr --delete '\n') envsubst > $AUTOSTART_PATH
+    local EXEC_PATH=$(where $2 | tail -1 | tr --delete '\n')
+    cat $FILE | envsubst > $AUTOSTART_PATH
 }
 
 mkdir -p $HOME/.config/autostart # ensures that path exists
