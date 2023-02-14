@@ -46,6 +46,8 @@ asdf_latest dart
 echo "Installing Flutter"
 asdf_latest flutter
 
+yay -S --noconfirm bat
+
 yay -S --noconfirm fzf
 
 yay -S --noconfirm fd

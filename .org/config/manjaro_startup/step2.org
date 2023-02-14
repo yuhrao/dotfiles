@@ -14,6 +14,7 @@
   - [[#dart][Dart]]
   - [[#flutter][Flutter]]
 - [[#clis-and-terminal-tools][CLIs and Terminal Tools]]
+  - [[#bat][Bat]]
   - [[#fzf][FZF]]
   - [[#fd][FD]]
   - [[#exa][Exa]]
@@ -121,6 +122,12 @@ asdf_latest flutter
 #+end_src
 
 * CLIs and Terminal Tools
+
+** Bat
+A cat alternative
+#+begin_src shell
+yay -S --noconfirm bat
+#+end_src
 
 ** FZF
 
