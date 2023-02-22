@@ -115,6 +115,11 @@ if [ -f '/usr/local/etc/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/loc
 if [ $(command -v kubectl) ]; then
     source <(kubectl completion zsh) 2> /dev/null
 fi
+
+if [ $(command -v k3d) ]; then
+    source <(k3d completion zsh) 2> /dev/null
+fi
+
 if [ $(command -v minikube) ]; then
     source <(minikube completion zsh) 2> /dev/null
 fi
@@ -136,10 +141,6 @@ if [ $(command -v neofetch) ] ; then
     neofetch
 fi
 
-if [ $(command -v direnv) ] ; then
-    eval "$(asdf exec direnv hook zsh)"
-fi
-
 if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
@@ -156,14 +157,6 @@ alias tl='t ls'
 alias tn='t new'
 alias tns='t new -t'
 alias tks='t kill-session -t'
-
-alias tm='/usr/bin/tmuxinator'
-alias tms='tm start'
-alias tmd='tm delete'
-alias tml='tm ls'
-alias tme='tm edit'
-alias tmn='tm new'
-alias tmp='tm implode'
 
 alias gitkraken='gitkraken &!'
 

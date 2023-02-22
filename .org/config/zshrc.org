@@ -35,7 +35,6 @@
 - [[#misc][Misc]]
   - [[#fuzzy-finder-and-navi][Fuzzy Finder and Navi]]
   - [[#neofetch][Neofetch]]
-  - [[#direnv][Direnv]]
   - [[#bash-insulter][Bash insulter]]
 - [[#aliases][Aliases]]
   - [[#kubectl][Kubectl]]
@@ -267,6 +266,11 @@ if [ -f '/usr/local/etc/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/loc
 if [ $(command -v kubectl) ]; then
     source <(kubectl completion zsh) 2> /dev/null
 fi
+
+if [ $(command -v k3d) ]; then
+    source <(k3d completion zsh) 2> /dev/null
+fi
+
 if [ $(command -v minikube) ]; then
     source <(minikube completion zsh) 2> /dev/null
 fi
@@ -305,17 +309,6 @@ if [ $(command -v neofetch) ] ; then
 fi
 #+END_SRC
 
-
-** Direnv
-Manage environment variables
-#+BEGIN_SRC shell
-if [ $(command -v direnv) ] ; then
-    eval "$(asdf exec direnv hook zsh)"
-fi
-#+END_SRC
-
-#+RESULTS:
-
 ** Bash insulter
 load bash insulter
 
@@ -349,7 +342,7 @@ alias tns='t new -t'
 alias tks='t kill-session -t'
 #+END_SRC
 
-*** Tmuxinator
+*** COMMENT Tmuxinator
 #+BEGIN_SRC shell
 alias tm='/usr/bin/tmuxinator'
 alias tms='tm start'
