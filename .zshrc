@@ -214,3 +214,19 @@ function emacs_prepare_go {
     echo "installing gopls"
     go get golang.org/x/tools/gopls
 }
+
+ide(){
+    local LANG=$1
+
+    case $LANG in
+        js)
+            webstorm ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+        clj| java)
+            intellij-idea-ultimate ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+        go)
+            goland ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+esac
+}

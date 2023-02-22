@@ -51,6 +51,7 @@
 - [[#functions][Functions]]
   - [[#set-java_home-based-on-asdf-java-version][Set =JAVA_HOME= based on asdf java version]]
   - [[#emacs-prepare-go][Emacs prepare go]]
+  - [[#jetbrains-ides][Jetbrains ides]]
 
 * Pre init
 ** SSH Agent
@@ -491,3 +492,26 @@ function emacs_prepare_go {
     go get golang.org/x/tools/gopls
 }
 #+END_SRC
+
+** Jetbrains ides
+#+begin_src shell
+ide(){
+    local LANG=$1
+
+    case $LANG in
+        js)
+            webstorm ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+        clj| java)
+            intellij-idea-ultimate ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+        go)
+            goland ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+        db)
+            datagrip ${@:2} > /dev/null 2> /dev/null &!
+            ;;
+
+esac
+}
+#+end_src
